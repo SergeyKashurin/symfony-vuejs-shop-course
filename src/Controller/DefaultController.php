@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\EditProductFormType;
 use Doctrine\DBAL\Types\TextType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -37,36 +38,24 @@ class DefaultController extends AbstractController
     {
 
         $entityManager = $this->getDoctrine()->getManager();
+
         if($id){
             $product = $entityManager->getRepository(Product::class)->find($id);
         } else {
             $product = new Product();
         }
 
-        $form = $this->createFormBuilder($product)
-            ->add('title', \Symfony\Component\Form\Extension\Core\Type\TextType::class)
-            ->add('price', NumberType::class)
-            ->add('quantity', IntegerType::class)
-            ->add('description', \Symfony\Component\Form\Extension\Core\Type\TextType::class)
-                ->getForm();
+        $form = $this->createForm(EditProductFormType::class, $product);
 
         $form->handleRequest($request);
 
-        //dump($product->getTitle());
-
         if($form->isSubmitted() && $form->isValid())
         {
-            $data  = $form->getData();
-            //dd($product, $data);
-
             $entityManager->persist($product);
             $entityManager->flush();
 
             return $this->redirectToRoute('product_edit', ['id' => $id]);
-
         }
-
-        # dd($product, $form);
 
         return $this->render('main/default/edit_product.html.twig', [
             'form' => $form->createView()
