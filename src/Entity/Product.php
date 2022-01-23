@@ -45,7 +45,7 @@ class Product
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPubliched;
+    private $isPublished;
 
     /**
      * @ORM\Column(type="boolean")
@@ -55,7 +55,7 @@ class Product
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->isPubliched = false;
+        $this->isPublished= false;
         $this->isDeleted = false;
     }
 
@@ -132,14 +132,14 @@ class Product
         return $this;
     }
 
-    public function getIsPubliched(): ?bool
+    public function getIsPublished(): ?bool
     {
-        return $this->isPubliched;
+        return $this->isPublished;
     }
 
-    public function setIsPubliched(bool $isPubliched): self
+    public function setIsisPublished(bool $isPublished): self
     {
-        $this->isPubliched = $isPubliched;
+        $this->isPublished = $isPublished;
 
         return $this;
     }
