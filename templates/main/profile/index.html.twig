@@ -1,20 +1,57 @@
-<!DOCTYPE html>
+{% extends 'main/base.html.twig' %}
 
-<title>Hello ProfileController!</title>
+{% block title %}My profile - RankedChoice{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="page-details mt-4">
+                        <h1 class="h4 mb-3 font-weight-normal title-gradient-1" id="page_header_title">Welcome, to your profile!</h1>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>Your email: </td>
+                                <td>{{ app.user.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Your full name: </td>
+                                <td>{% if app.user.fullName %}{{ app.user.fullName }}{% else %}-{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Your phone: </td>
+                                <td>{% if app.user.phone %}{{ app.user.phone }}{% else %}-{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Your address: </td>
+                                <td>{% if app.user.address %}{{ app.user.address }}{% else %}-{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Your zipcode: </td>
+                                <td>{% if app.user.zipcode %}{{ app.user.zipcode }}{% else %}-{% endif %}</td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/u1/PHP-Projects/ranked-choice.shop/src/Controller/ProfileController.php'|file_link(0) }}">src/Controller/ProfileController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/u1/PHP-Projects/ranked-choice.shop/templates/profile/index.html.twig'|file_link(0) }}">templates/profile/index.html.twig</a></code></li>
-    </ul>
-</div>
+                        <div class="alert alert-info">
+                            Please, before you make some order fill your full information.
+                        </div>
+                        <hr/>
+                        <div class="form-footer-buttons">
+                            <a href="#" class="btn btn-link btn-dark">
+                                <i class="far fa-address-card"></i>
+                                <span>EDIT PROFILE INFO</span>
+                            </a>
+                            <a href="#" class="btn btn-link btn-dark">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>LOGOUT</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
