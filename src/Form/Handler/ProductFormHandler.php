@@ -47,7 +47,7 @@ class ProductFormHandler {
         $this->productManager->updateProductImages($product, $tempImageFilename);
 
         $this->productManager->save($product);
-        dd($product);
+
         return $product;
     }
     
