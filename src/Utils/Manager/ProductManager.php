@@ -70,6 +70,11 @@ class ProductManager {
         return sprintf('%s/%s', $this->productImagesDir, $product->getId());
     }
 
+    /**
+     * @param Product $product
+     * @param string|null $tempImageFilename
+     * @return Product
+     */
     public function updateProductImages(Product $product, string $tempImageFilename = null): Product
     {
         if(!$tempImageFilename) {

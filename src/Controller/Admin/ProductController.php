@@ -17,9 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProductController extends AbstractController
 {
+
     /**
-     * @Route("/list", name="list")
+     * @param ProductRepository $productRepository
+     * @return Response
      *
+     * @Route("/list", name="list")
      */
     public function list(ProductRepository $productRepository): Response
     {
@@ -34,6 +37,11 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param ProductFormHandler $productFormHandler
+     * @param Product|null $product
+     * @return Response
+     *
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"})
      * @Route("/add", name="add")
      */
@@ -59,6 +67,9 @@ class ProductController extends AbstractController
     }
 
     /**
+     * @param Product $product
+     * @param ProductManager $productManager
+     * @return Response
      * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"})
      */
     public function delete(Product $product, ProductManager $productManager): Response

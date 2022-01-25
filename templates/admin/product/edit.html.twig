@@ -4,14 +4,7 @@
 
 {% block body %}
     <div class="card shadow mb-4">
-{#        <div class="card-header py-3">#}
-{#            {% include 'admin/_embed/_card/_breadcrumbs.html.twig' with {#}
-{#                'sectionTitle': 'Products',#}
-{#                'actionUrl': path('admin_product_list'),#}
-{#                'addActionUrl': path('admin_product_add'),#}
-{#                'entity': product#}
-{#            } %}#}
-{#        </div>#}
+
         <div class="card-body">
             {{ form_start(form) }}
             <div class="form-group row">
@@ -117,30 +110,6 @@
                     </div>
                 </div>
             </div>
-
-{#            {% if images|length %}#}
-{#                <div class="row">#}
-{#                    <div class="col-md-12">#}
-{#                        <span class="text-gray-600">Current images:</span>#}
-{#                    </div>#}
-{#                </div>#}
-
-{#                {% for image in images %}#}
-{#                    <div class="row mt-2">#}
-{#                        <div class="col-md-5">#}
-{#                            <img src="{{ asset('uploads/images/products/' ~ product.id ~ '/' ~ image.filenameMiddle) }}" alt="{{ image.filenameMiddle }}">#}
-{#                        </div>#}
-{#                        <div class="col-md-7">#}
-{#                            <a href="{{ path('admin_product_image_delete', {#}
-{#                                'id': image.id#}
-{#                            }) }}" class="btn btn-outline-info">#}
-{#                                DELETE#}
-{#                            </a>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                {% endfor %}#}
-
-{#            {% endif %}#}
 
             <hr/>
             {% include 'admin/_embed/_card/_form_buttons.html.twig' with {
