@@ -44,6 +44,7 @@ class ProductFormHandler {
             ? $this->fileSaver->saveUploadedFileIntoTemp($newImageFile)
             : null;
 
+
         $this->productManager->updateProductImages($product, $tempImageFilename);
 
         $this->productManager->save($product);
