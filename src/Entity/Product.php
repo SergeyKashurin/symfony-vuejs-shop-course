@@ -22,7 +22,7 @@ class Product
     private $id;
 
     /**
-     * @ORM\Column(type="uuid", nullable=true)
+     * @ORM\Column(type="uuid")
      */
     private $uuid;
 
@@ -92,6 +92,11 @@ class Product
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuId(): ?string
+    {
+        return $this->uuid;
     }
 
     public function getTitle(): ?string

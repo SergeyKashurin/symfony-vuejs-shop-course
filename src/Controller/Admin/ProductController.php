@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
+use App\Form\DTO\EditProductModel;
 use App\Form\EditProductFormType;
 use App\Form\Handler\ProductFormHandler;
 use App\Repository\ProductRepository;
@@ -47,12 +48,9 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, ProductFormHandler $productFormHandler, Product $product = null): Response
     {
+        $editProductModel = EditProductModel::makeFromProduct($product);
 
-        if(!$product) {
-            $product = new Product();
-        }
-
-        $form = $this->createForm(EditProductFormType::class, $product);
+        $form = $this->createForm(EditProductFormType::class, $editProductModel);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
