@@ -20,7 +20,7 @@ final class Version20220128194436 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('ALTER TABLE product ADD uuid UUID DEFAULT NULL');
+        #$this->addSql('ALTER TABLE product ADD uuid UUID DEFAULT NULL');
         $this->addSql('COMMENT ON COLUMN product.uuid IS \'(DC2Type:uuid)\'');
         $this->addSql('UPDATE product SET uuid=uuid_generate_v4() WHERE uuid IS NULL');
     }

@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20220128194656 extends AbstractMigration
+final class Version20220129144940 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,7 +20,8 @@ final class Version20220128194656 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        #this->addSql('ALTER TABLE product ALTER uuid SET NOT NULL');
+        $this->addSql('ALTER TABLE category ADD is_deleted BOOLEAN DEFAULT NULL');
+        $this->addSql('ALTER TABLE product ALTER uuid SET NOT NULL');
     }
 
     public function down(Schema $schema): void
@@ -28,5 +29,6 @@ final class Version20220128194656 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE SCHEMA public');
         $this->addSql('ALTER TABLE product ALTER uuid DROP NOT NULL');
+        $this->addSql('ALTER TABLE category DROP is_deleted');
     }
 }
