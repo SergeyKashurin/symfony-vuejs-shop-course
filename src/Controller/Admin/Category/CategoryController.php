@@ -70,8 +70,10 @@ class CategoryController extends AbstractController
      *
      * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"})
      */
-    public function delete(Category $category): Response
+    public function delete(Category $category, CategoryManager $categoryManager): Response
     {
-        return true;
+        $categoryManager->remove($category);
+
+        return $this->redirectToRoute('admin_category_list');
     }
 }
