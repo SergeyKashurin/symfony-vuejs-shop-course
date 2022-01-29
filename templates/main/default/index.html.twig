@@ -9,7 +9,7 @@
         <div class="row">
             <div class="col-lg-6">
                 <div class="banner banner-big">
-                    <a href="#">
+                    <a href="{{ path('main_category_show', {'slug': 'jeans'}) }}">
                         <img src="{{ asset('build/images/banner/collection/banner_1.jpg') }}" alt="banner">
                     </a>
 
@@ -20,7 +20,7 @@
                         <h2 class="banner-title">
                             Jeans
                         </h2>
-                        <a href="#" class="btn btn-link">
+                        <a href="{{ path('main_category_show', {'slug': 'jeans'}) }}"" class="btn btn-link">
                             Show me
                         </a>
                     </div>
@@ -29,7 +29,7 @@
 
             <div class="col-lg-6">
                 <div class="banner banner-big">
-                    <a href="#">
+                    <a href="{{ path('main_category_show', {'slug': 'jackets'}) }}">
                         <img src="{{ asset('build/images/banner/collection/banner_2.jpg') }}" alt="banner">
                     </a>
 
@@ -40,7 +40,7 @@
                         <h2 class="banner-title">
                             Jackets
                         </h2>
-                        <a href="#" class="btn btn-link">
+                        <a href="{{ path('main_category_show', {'slug': 'jackets'}) }}" class="btn btn-link">
                             Show me
                         </a>
                     </div>
@@ -51,7 +51,7 @@
         <div class="row mt-1 justify-content-center align-items-center">
             <div class="col-md-6 col-lg-4">
                 <div class="banner banner-middle">
-                    <a href="#">
+                    <a href="{{ path('main_category_show', {'slug': 'hats'}) }}">
                         <img src="{{ asset('build/images/banner/collection/banner_3.jpg') }}" alt="banner">
                     </a>
 
@@ -59,7 +59,7 @@
                         <h3 class="banner-subtitle">
                             Unique!
                         </h3>
-                        <a href="#" class="btn btn-link">
+                        <a href="{{ path('main_category_show', {'slug': 'hats'}) }}" class="btn btn-link">
                             Hats
                         </a>
                     </div>
@@ -68,7 +68,7 @@
 
             <div class="col-md-6 col-lg-4">
                 <div class="banner banner-middle">
-                    <a href="#">
+                    <a href="{{ path('main_category_show', {'slug': 'dresses'}) }}">
                         <img src="{{ asset('build/images/banner/collection/banner_4.jpg') }}" alt="banner">
                     </a>
 
@@ -76,7 +76,7 @@
                         <h3 class="banner-subtitle">
                             Fashionable!
                         </h3>
-                        <a href="#" class="btn btn-link">
+                        <a href="{{ path('main_category_show', {'slug': 'dresses'}) }}" class="btn btn-link">
                             Dresses
                         </a>
                     </div>
@@ -85,7 +85,7 @@
 
             <div class="col-md-6 col-lg-4">
                 <div class="banner banner-middle">
-                    <a href="#">
+                    <a href="{{ path('main_category_show', {'slug': 'sneakers'}) }}">
                         <img src="{{ asset('build/images/banner/collection/banner_5.jpg') }}" alt="banner">
                     </a>
 
@@ -93,7 +93,7 @@
                         <h3 class="banner-subtitle text-white">
                             Branded!
                         </h3>
-                        <a href="#" class="btn btn-link">
+                        <a href="{{ path('main_category_show', {'slug': 'sneakers'}) }}" class="btn btn-link">
                             Sneakers
                         </a>
                     </div>
@@ -101,4 +101,10 @@
             </div>
         </div>
     </div>
+
+    {{ render(controller('App\\Controller\\Main\\EmbedController::showSimilarProducts', {
+        'productCount': 4,
+    }
+    )) }}
+
 {% endblock %}
