@@ -164,7 +164,7 @@ class Product
         return $this->isPublished;
     }
 
-    public function setIsisPublished(bool $isPublished): self
+    public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;
 
