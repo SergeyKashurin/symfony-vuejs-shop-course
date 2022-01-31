@@ -29,7 +29,7 @@ class Order
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="orders")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $Owner;
+    private $owner;
 
     /**
      * @ORM\Column(type="integer")
@@ -61,6 +61,7 @@ class Order
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->orderProducts = new ArrayCollection();
+        $this->isDeleted = false;
     }
 
     public function getId(): ?int
@@ -82,12 +83,12 @@ class Order
 
     public function getOwner(): ?User
     {
-        return $this->Owner;
+        return $this->owner;
     }
 
-    public function setOwner(?User $Owner): self
+    public function setOwner(?User $owner): self
     {
-        $this->Owner = $Owner;
+        $this->owner = $owner;
 
         return $this;
     }
