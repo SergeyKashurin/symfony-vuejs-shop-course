@@ -19,31 +19,23 @@ use Symfony\Component\Routing\Annotation\Route;
 class CartApiController extends AbstractController
 {
     /**
-     * @param Request $request
-     * @param CartRepository $cartRepository
-     * @param CartProductRepository $cartProductRepository
-     * @param ProductRepository $productRepository
-     * @return Response
-     *
-     * @Route("/cart/api", methods="POST", name="cart_save")
+     * @Route("/cart", methods="POST", name="cart_save")
      */
     public function saveCart(Request $request, CartRepository $cartRepository, CartProductRepository $cartProductRepository, ProductRepository $productRepository): Response
     {
-
         $productId = $request->request->get('productId');
         $phpSessionId = $request->cookies->get('PHPSESSID');
+
         $product = $productRepository->findOneBy(['uuid' => $productId]);
 
         $cart = $cartRepository->findOneBy(['sessionId' => $phpSessionId]);
-
-        if(!$cart) {
+        if (!$cart) {
             $cart = new Cart();
             $cart->setSessionId($phpSessionId);
         }
 
         $cartProduct = $cartProductRepository->findOneBy(['cart' => $cart, 'product' => $product]);
-
-        if(!$cartProduct) {
+        if (!$cartProduct) {
             $cartProduct = new CartProduct();
             $cartProduct->setCart($cart);
             $cartProduct->setQuantity(1);
@@ -61,10 +53,10 @@ class CartApiController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse([
-           'success' => false,
+            'success' => false,
             'data' => [
-              'test' => 123,
-            ],
+                'test' => 123
+            ]
         ]);
     }
 }
