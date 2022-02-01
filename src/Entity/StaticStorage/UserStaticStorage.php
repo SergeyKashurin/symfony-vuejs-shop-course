@@ -12,6 +12,7 @@ class UserStaticStorage
     {
         return [
           self::USER_ROLE_ADMIN => 'Admin',
+          self::USER_ROLE_USER => 'User',
         ];
     }
 }

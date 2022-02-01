@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User;
 use App\Form\Admin\EditUserFormType;
+use App\Form\Handler\UserFormHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,7 +40,7 @@ class UserController extends AbstractController
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"})
      * @Route("/add", name="add")
      */
-    public function edit(Request $request, User $user = null): Response
+    public function edit(Request $request, UserFormHandler $userFormHandler, User $user = null): Response
     {
         if(!$user) {
             $user = new User();
@@ -49,12 +50,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            //$user = $editUserModel->processEditForm($editUserModel);
+            $user = $userFormHandler->processEditForm($form);
 
             $this->addFlash('success', 'Your changes were saved!');
 
             return $this->redirectToRoute('admin_user_edit', [
-                'id' => $user->getId(),
+                'id' => $user->getData()->getId(),
             ]);
         }
 
