@@ -31,7 +31,15 @@ use ApiPlatform\Core\Annotation\ApiProperty;
  *          "security"="is_granted('ROLE_ADMIN')",
  *          "normalization_context"={"groups"="product:item:write"},
  *       },
- *     }
+ *     },
+ *     order={
+ *          "id"="DESC",
+ *     },
+ *     attributes={
+ *          "pagination_client_items_per_page"=true,
+ *          "formats"={"jsonld", "json"}
+ *     },
+ *     paginationEnabled=true
  * )
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  */
