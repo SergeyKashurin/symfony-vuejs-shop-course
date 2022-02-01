@@ -2,25 +2,27 @@
 
 namespace App\Controller\Admin;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/admin/user", name="admin_user_")
  */
-class UserController
+class UserController extends AbstractController
 {
     /**
      * @return Response
      *
      * @Route("/list", name="list")
      */
-    public function list(UserRepository $userRepository): Response
+    public function list(UserRepository $userRepository)
     {
 
-        $user = $userRepository->findBy(['isDeleted' => false], ['id' => 'DESC']);
+        $users = $userRepository->findBy(['isDeleted' => false], ['id' => 'DESC']);
 
         return $this->render('admin/user/list.html.twig', [
-            'user' => $user,
+            'users' => $users,
         ]);
     }
 
