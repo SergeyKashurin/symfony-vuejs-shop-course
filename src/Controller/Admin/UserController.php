@@ -2,6 +2,7 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\StaticStorage\UserStaticStorage;
 use App\Entity\User;
 use App\Form\Admin\EditUserFormType;
 use App\Form\Handler\UserFormHandler;
@@ -23,7 +24,6 @@ class UserController extends AbstractController
      */
     public function list(UserRepository $userRepository)
     {
-
         $users = $userRepository->findBy(['isDeleted' => false], ['id' => 'DESC']);
 
         return $this->render('admin/user/list.html.twig', [
