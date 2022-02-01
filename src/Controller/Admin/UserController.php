@@ -2,8 +2,12 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
+use App\Form\Admin\EditUserFormType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -29,27 +33,28 @@ class UserController extends AbstractController
 
     /**
      * @param Request $request
-     * @param Category|null $category
+     * @param User|null $user
      * @return Response
      *
-     * * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"})
+     * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"})
      * @Route("/add", name="add")
      */
-    public function edit(Request $request, CategoryFormHandler $categoryFormHandler, Category $category = null): Response
+    public function edit(Request $request, User $user = null): Response
     {
-        /*
-        $editCategoryModel = EditCategoryModel::makeFromCategory($category);
+        if(!$user) {
+            $user = new User();
+        }
 
-        $form = $this->createForm(EditCategoryFormType::class, $editCategoryModel);
+        $form = $this->createForm(EditUserFormType::class, $user);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
-            $category = $categoryFormHandler->processEditForm($editCategoryModel);
+            //$user = $editUserModel->processEditForm($editUserModel);
 
             $this->addFlash('success', 'Your changes were saved!');
 
-            return $this->redirectToRoute('admin_category_edit', [
-                'id' => $category->getId(),
+            return $this->redirectToRoute('admin_user_edit', [
+                'id' => $user->getId(),
             ]);
         }
 
@@ -57,10 +62,10 @@ class UserController extends AbstractController
         {
             $this->addFlash('warning', 'Something went wrong. Please check your form.');
         }
-        */
-        return $this->render('admin/category/edit.html.twig', [
-            'category' => $category,
-            #'form' => $form->createView(),
+
+        return $this->render('admin/user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
 
