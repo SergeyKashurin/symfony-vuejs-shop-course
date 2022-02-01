@@ -6,6 +6,7 @@ use App\Entity\StaticStorage\UserStaticStorage;
 use App\Entity\User;
 use App\Form\Admin\EditUserFormType;
 use App\Form\Handler\UserFormHandler;
+use App\Utils\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,18 +72,17 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param Category $category
+     * @param User $user
      * @return Response
      *
      * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"})
      */
-    public function delete(Category $category, CategoryManager $categoryManager): Response
+    public function delete(User $user, UserManager $userManager): Response
     {
-        /*
-        $categoryManager->remove($category);
+        $userManager->remove($user);
 
-        $this->addFlash('warning', 'The category was successfully deleted!');
-          */
-        return $this->redirectToRoute('admin_category_list');
+        $this->addFlash('warning', 'The user was successfully deleted!');
+
+        return $this->redirectToRoute('admin_user_list');
     }
 }
