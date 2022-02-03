@@ -23,6 +23,9 @@ Encore
     .addEntry('section-main', './assets/section-main.js')
     .addEntry('section-admin', './assets/section-admin.js')
 
+
+    .addEntry('addAdminOrder', './assets/js/section/admin/admin-order/app.js')
+
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     //.enableStimulusBridge('./assets/controllers.json')
 
@@ -48,6 +51,7 @@ Encore
     .cleanupOutputBeforeBuild()
     .enableBuildNotifications()
     .enableSassLoader()
+    .enableVueLoader()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
