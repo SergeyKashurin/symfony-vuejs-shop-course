@@ -4,9 +4,17 @@ namespace App\Entity;
 
 use App\Repository\OrderProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ORM\Entity(repositoryClass=OrderProductRepository::class)
+ * @ApiResource(
+ *      itemOperations={
+ *          "delete"={
+ *              "security"="is_granted('ROLE_ADMIN')",
+ *          }
+ *     }
+ * )
  */
 class OrderProduct
 {
