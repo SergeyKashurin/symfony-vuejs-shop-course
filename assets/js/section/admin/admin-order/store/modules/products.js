@@ -1,6 +1,9 @@
 const state = () => ({
     categories: [],
-    testProperty: 'test - test',
+    staticStore: {
+        orderId: window.staticStore.orderId,
+        orderProducts: window.staticStore.orderProducts,
+    }
 });
 
 const getters = {
