@@ -5,7 +5,7 @@ namespace App\Entity;
 use App\Repository\OrderProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
-use PHPUnit\TextUI\XmlConfiguration\Groups;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=OrderProductRepository::class)
@@ -20,9 +20,7 @@ use PHPUnit\TextUI\XmlConfiguration\Groups;
  *     },
  *  },
  *      itemOperations={
- *          "get={
- *
- *          },
+ *          "get"={},
  *          "delete"={
  *              "security"="is_granted('ROLE_ADMIN')",
  *          }

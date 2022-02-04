@@ -60,10 +60,10 @@
         );
         window.open(url, '_blank').focus();
       },
-      remove(event) {
+      remove: function (event) {
         event.preventDefault();
         this.removeOrderProduct(this.orderProduct.id);
-      }
+      },
     }
   }
 </script>
