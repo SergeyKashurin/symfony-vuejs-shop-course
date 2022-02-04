@@ -121,6 +121,10 @@
     {% endif %}
 
     {% block javascripts %}
+        <script>
+            const orderProducts = {{ orderProducts|json_encode|raw }};
+            console.log(orderProducts);
+        </script>
         {{ encore_entry_script_tags('appAdminOrder') }}
     {% endblock %}
 
