@@ -8,7 +8,6 @@ const state = () => ({
     staticStore: {
         orderId: window.staticStore.orderId,
         orderProducts: window.staticStore.orderProducts,
-
         url: {
           viewProduct: window.staticStore.urlViewProduct,
           apiOrderProduct: window.staticStore.urlAPIOrderProduct,
@@ -20,16 +19,17 @@ const getters = {
 
 };
 
-const actions = {
-    async removeOrderProduct({ state, dispatch }, orderProductId) {
+const actions = { //{ state, dispatch }
+    async removeOrderProduct({ dispatch }, orderProductId) {
+        //console.log(orderProductId);
         const url = concatUrlByParams(
-            state.staticStore.url.apiOrderProduct,
+            staticStore.urlAPIOrderProduct,
             orderProductId
         );
         const result = await axios.delete(url, apiConfig);
-
-        if(result.status === StatusCodes.NO_CONTENT) {
-            console.log("Deleted!");
+        console.log(result);
+        if (result.status === StatusCodes.NO_CONTENT) {
+            dispatch('getOrderProducts');
         }
     }
 };

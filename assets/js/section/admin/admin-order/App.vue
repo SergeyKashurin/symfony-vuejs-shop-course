@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex';
+import {mapActions, mapState} from 'vuex';
   import OrderProductItem from "./components/OrderProductItem";
   export default {
     components: {OrderProductItem},

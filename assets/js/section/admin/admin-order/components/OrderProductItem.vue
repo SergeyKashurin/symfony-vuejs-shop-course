@@ -23,8 +23,9 @@
 </template>
 
 <script>
-  import {mapState, mapActions} from "vuex";
+  import {mapActions, mapState} from 'vuex';
   import {getUrlViewProduct} from "../../../../utils/url-generator";
+  import products from "../store/modules/products";
 
   export default {
     name: "OrderProductItem",
@@ -60,9 +61,9 @@
         );
         window.open(url, '_blank').focus();
       },
-      remove: function (event) {
+      remove(event) {
         event.preventDefault();
-        this.removeOrderProduct(this.orderProduct.id);
+        products.actions.removeOrderProduct(this.orderProduct.id);
       },
     }
   }

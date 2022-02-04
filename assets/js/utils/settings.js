@@ -1,7 +1,6 @@
-export const apiConfig =
-    {
-        headers: {
-            accept: "application/ld-json",
-            "Content-type": "application/json",
-        },
+export const apiConfig = {
+    headers: {
+        accept: "application/ld+json",
+        "Content-Type": "application/json"
     }
+};
