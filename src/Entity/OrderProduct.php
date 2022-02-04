@@ -5,11 +5,24 @@ namespace App\Entity;
 use App\Repository\OrderProductRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use PHPUnit\TextUI\XmlConfiguration\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=OrderProductRepository::class)
  * @ApiResource(
+ *  collectionOperations={
+ *      "get"={
+ *          "normalization_context"={"groups"="order_product:list"}
+ *       },
+ *      "post"={
+ *          "security"="is_granted('ROLE_ADMIN')",
+ *          "normalization_context"={"groups"="order_product:list:write"},
+ *     },
+ *  },
  *      itemOperations={
+ *          "get={
+ *
+ *          },
  *          "delete"={
  *              "security"="is_granted('ROLE_ADMIN')",
  *          }
@@ -22,6 +35,7 @@ class OrderProduct
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"order_product:list"})
      */
     private $id;
 
