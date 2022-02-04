@@ -16,13 +16,16 @@
       ${{ orderProduct.pricePerOne }}
     </div>
     <div class="col-md-3">
-      <button class="btn btn-outline-info">Details</button>
-      <button class="btn btn-outline-success">Remove</button>
+      <button class="btn btn-outline-info" @click="viewDetails">Details</button>
+      <button class="btn btn-outline-success" @click="remove">Remove</button>
     </div>
   </div>
 </template>
 
 <script>
+  import {mapState} from "vuex";
+  import {getUrlViewProduct} from "../../../../utils/url-generator";
+
   export default {
     name: "OrderProductItem",
     props: {
@@ -36,6 +39,7 @@
       }
     },
     computed: {
+      ...mapState("products", ["staticStore"]),
       rowNumber() {
         return this.index + 1
       },
@@ -45,7 +49,16 @@
       categoryTitle() {
         return this.orderProduct.product.category.title;
       },
-
+    },
+    methods: {
+      viewDetails(event) {
+        event.preventDefault();
+        const url = getUrlViewProduct(
+            this.staticStore.url.viewProduct,
+            this.orderProduct.product.id
+        );
+        window.open(url, '_blank').focus();
+      }
     }
   }
 </script>

@@ -44,6 +44,7 @@ class ProductController extends AbstractController
      * @return Response
      *
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"})
+     * @Route("/edit", name="edit_blank")
      * @Route("/add", name="add")
      */
     public function edit(Request $request, ProductFormHandler $productFormHandler, Product $product = null): Response
