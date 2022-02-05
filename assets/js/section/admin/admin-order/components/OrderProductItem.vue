@@ -46,7 +46,7 @@
         return this.index + 1
       },
       productTitle() {
-        return getProductInformativeTitle(this.orderProduct.product;
+        return getProductInformativeTitle(this.orderProduct.product);
       },
       categoryTitle() {
         return this.orderProduct.product.category.title;

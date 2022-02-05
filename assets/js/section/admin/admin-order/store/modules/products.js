@@ -31,6 +31,7 @@ const getters = {
 
 // TODO Понять из-за чего не работает передача параметра orderProductId если он перед { state, dispatch }
 const actions = {
+
     async getProductsByCategory({commit, state}) {
         const url = getUrlProductsByCategory(
             state.staticStore.url.apiProduct,
@@ -45,6 +46,7 @@ const actions = {
             commit("setCategoryProducts", result.data["hydra:member"]);
         }
     },
+
     async getCategories({ commit, state }) {
         const url = staticStore.urlAPICategory;
 
@@ -55,15 +57,28 @@ const actions = {
         }
     },
 
-    //{ state, dispatch }
+    async addNewProductOrder({ state, dispatch }) {
+        const url = state.staticStore.url.apiOrderProduct;
+        const data = {
+            pricePerOne: state.newOrderProduct.pricePerOne,
+            quantity:    parseInt(state.newOrderProduct.quantity),
+            product:     "/api/products/" + state.newOrderProduct.productId,
+            appOrder:    "/api/orders/" + state.staticStore.orderId,
+        };
+
+        const result = await axios.post(url, data, apiConfig);
+
+        if (result.data && result.status === StatusCodes.CREATED) {
+            console.log('Ok');
+        }
+    },
+
     async removeOrderProduct({ dispatch }, orderProductId) {
-        //console.log(orderProductId);
         const url = concatUrlByParams(
             staticStore.urlAPIOrderProduct,
             orderProductId
         );
         const result = await axios.delete(url, apiConfig);
-        console.log(result);
         if (result.status === StatusCodes.NO_CONTENT) {
             dispatch('getOrderProducts');
         }
