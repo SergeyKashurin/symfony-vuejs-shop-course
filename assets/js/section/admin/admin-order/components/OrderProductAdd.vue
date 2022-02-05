@@ -4,7 +4,9 @@
         <select
             v-model="form.categoryId"
             name="add_product_category_select"
-            class="form-control">
+            class="form-control"
+            @change="getProducts()"
+            >
         <option value="" disabled> - choose options - </option>
         <option
           v-for="category in categories"
@@ -58,7 +60,8 @@
 </template>
 
 <script>
-import {mapActions, mapState} from 'vuex';
+  import {mapActions, mapState, mapMutations} from 'vuex';
+  import products from "../store/modules/products";
 
   export default {
     name: 'OrderProductAdd',
@@ -74,6 +77,14 @@ import {mapActions, mapState} from 'vuex';
     },
     computed: {
       ...mapState("products", ["categories"]),
+    },
+    methods: {
+      ...mapMutations("products", ["setNewProductInfo"]),
+      ...mapActions("products", ["getProductsByCategory"]),
+      getProducts() {
+        this.setNewProductInfo(this.form); //products.mutations
+        this.getProductsByCategory(); //products.actions
+      },
     },
   }
 </script>
