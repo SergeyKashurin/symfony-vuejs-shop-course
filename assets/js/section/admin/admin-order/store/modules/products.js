@@ -4,25 +4,32 @@ import {StatusCodes} from "http-status-codes";
 import {apiConfig} from "../../../../../utils/settings";
 
 const state = () => ({
+
     categories: [],
+
     categoryProducts: [],
+
+    orderProducts: [],
+
     newOrderProduct: {
-        categoryId: "",
-        productId: "",
-        quantity: "",
+        categoryId:  "",
+        productId:   "",
+        quantity:    "",
         pricePerOne: ""
     },
+
     staticStore: {
-        orderId: window.staticStore.orderId,
-        orderProducts: window.staticStore.orderProducts,
+        orderId:              window.staticStore.orderId,
+
         url: {
-          viewProduct: window.staticStore.urlViewProduct,
-          apiOrderProduct: window.staticStore.urlAPIOrderProduct,
-          apiCategory: window.staticStore.urlAPICategory,
-          apiProduct: window.staticStore.urlAPIProduct,
-        },
+            viewProduct:      window.staticStore.urlViewProduct,
+            apiOrder:         window.staticStore.urlAPIOrder,
+            apiOrderProduct:  window.staticStore.urlAPIOrderProduct,
+            apiCategory:      window.staticStore.urlAPICategory,
+            apiProduct:       window.staticStore.urlAPIProduct
+        }
     },
-    viewProductCountLimit: 25,
+    viewProductCountLimit: 25
 });
 
 const getters = {
@@ -31,6 +38,18 @@ const getters = {
 
 // TODO Понять из-за чего не работает передача параметра orderProductId если он перед { state, dispatch }
 const actions = {
+    async getOrderProducts({commit, state}) {
+        const url = concatUrlByParams(
+            state.staticStore.url.apiOrder,
+            state.staticStore.orderId,
+        );
+
+        const result = await axios.get(url, apiConfig);
+
+        if (result.data && result.status === StatusCodes.OK) {
+            commit("setOrderProducts", result.data.orderProducts);
+        }
+    },
 
     async getProductsByCategory({commit, state}) {
         const url = getUrlProductsByCategory(
@@ -53,23 +72,22 @@ const actions = {
         const result = await axios.get(url, apiConfig);
 
         if (result.data && result.status === StatusCodes.OK) {
-            commit("setCategories", result.data["hydra:member"]);
+            commit('setCategories', result.data["hydra:member"]);
         }
     },
 
-    async addNewProductOrder({ state, dispatch }) {
+    async addNewOrderProduct({ state, dispatch }) {
         const url = state.staticStore.url.apiOrderProduct;
         const data = {
-            pricePerOne: state.newOrderProduct.pricePerOne,
-            quantity:    parseInt(state.newOrderProduct.quantity),
-            product:     "/api/products/" + state.newOrderProduct.productId,
-            appOrder:    "/api/orders/" + state.staticStore.orderId,
+            pricePerOne: state.newOrderProduct.pricePerOne.toString(),
+            quantity: parseInt(state.newOrderProduct.quantity),
+            product: "/api/products/" + state.newOrderProduct.productId,
+            appOrder: "/api/orders/" + state.staticStore.orderId
         };
 
         const result = await axios.post(url, data, apiConfig);
-
         if (result.data && result.status === StatusCodes.CREATED) {
-            console.log('Ok');
+            dispatch('getOrderProducts');
         }
     },
 
@@ -80,7 +98,7 @@ const actions = {
         );
         const result = await axios.delete(url, apiConfig);
         if (result.status === StatusCodes.NO_CONTENT) {
-            dispatch('getOrderProducts');
+            console.log('Deleted');
         }
     }
 };
@@ -89,9 +107,15 @@ const mutations = {
     setCategories(state, categories) {
         state.categories = categories;
     },
+
     setCategoryProducts(state, categoryProducts) {
         state.categoryProducts = categoryProducts;
     },
+
+    setOrderProducts(state, orderProducts) {
+        state.orderProducts = orderProducts;
+    },
+
     setNewProductInfo(state, formData) {
         state.newOrderProduct.categoryId = formData.categoryId;
         state.newOrderProduct.productId = formData.productId;

@@ -7,7 +7,7 @@
             class="form-control"
             @change="getProducts()"
             >
-        <option value="" disabled> - choose options - </option>
+        <option value="" disabled> - choose category - </option>
         <option
           v-for="category in categories"
           :key="category.id"
@@ -22,7 +22,7 @@
           v-model="form.productId"
           name="add_product_product_select"
           class="form-control">
-        <option value="" disabled> - choose options - </option>
+        <option value="" disabled> - choose product - </option>
         <option
             v-for="categoryProduct in categoryProducts"
             :key="categoryProduct.id"
@@ -90,8 +90,8 @@
       ...mapState("products", ["categories", "categoryProducts", "staticStore"]),
     },
     methods: {
-      ...mapMutations("products", ["setNewProductInfo"]),
-      ...mapActions("products", ["addNewProductOrder", "getProductsByCategory"]),
+      ...mapMutations("products", ["setNewProductInfo", "setOrderProducts"]),
+      ...mapActions("products", ["addNewOrderProduct", "getProductsByCategory"]),
       productTitle(product) {
         return getProductInformativeTitle(product);
       },
@@ -110,7 +110,7 @@
       submit(event) {
         event.preventDefault();
         this.setNewProductInfo(this.form);
-        this.addNewProductOrder();
+        this.addNewOrderProduct();
         this.resetFormData();
       },
       resetFormData() {

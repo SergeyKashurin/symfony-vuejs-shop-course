@@ -1,12 +1,13 @@
 <template>
   <div class="table-additional-selection">
-    <OrderProductAdd></OrderProductAdd>
+    <OrderProductAdd/>
     <hr/>
-      <OrderProductItem
-        v-for="(orderProduct, index) in staticStore.orderProducts"
+    <OrderProductItem
+        v-for="(orderProduct, index) in orderProducts"
         :key="orderProduct.id"
         :order-product="orderProduct"
-        :index="index"/>
+        :index="index"
+    />
     <hr/>
   </div>
 </template>
@@ -19,12 +20,13 @@
     components: {OrderProductAdd, OrderProductItem},
     created() {
       this.getCategories();
+      this.getOrderProducts();
     },
     computed: {
-      ...mapState("products", ["staticStore"]),
+      ...mapState("products", ["orderProducts"]),
     },
     methods: {
-      ...mapActions("products", ["getCategories"])
+      ...mapActions("products", ["getCategories", "getOrderProducts"])
     }
   }
 </script>
