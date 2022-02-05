@@ -11,6 +11,7 @@ const state = () => ({
         url: {
           viewProduct: window.staticStore.urlViewProduct,
           apiOrderProduct: window.staticStore.urlAPIOrderProduct,
+          apiCategory: window.staticStore.urlAPICategory,
         },
     }
 });
@@ -19,7 +20,19 @@ const getters = {
 
 };
 
-const actions = { //{ state, dispatch }
+// TODO Понять из-за чего не работает передача параметра orderProductId если он перед { state, dispatch }
+const actions = {
+    async getCategories({ commit, state }) {
+        const url = staticStore.urlAPICategory;
+
+        const result = await axios.get(url, apiConfig);
+
+        if (result.data && result.status === StatusCodes.OK) {
+            commit("setCategories", result.data["hydra:member"]);
+        }
+    },
+
+    //{ state, dispatch }
     async removeOrderProduct({ dispatch }, orderProductId) {
         //console.log(orderProductId);
         const url = concatUrlByParams(
@@ -35,7 +48,9 @@ const actions = { //{ state, dispatch }
 };
 
 const mutations = {
-
+    setCategories(state, categories) {
+        state.categories = categories;
+    }
 };
 
 export default {
