@@ -24,7 +24,7 @@
           class="form-control">
         <option value="" disabled> - choose product - </option>
         <option
-            v-for="categoryProduct in categoryProducts"
+            v-for="categoryProduct in freeCategoryProducts"
             :key="categoryProduct.id"
             :value="categoryProduct.uuid"
         >
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import {mapActions, mapState, mapMutations} from 'vuex';
+  import {mapActions, mapState, mapMutations, mapGetters} from 'vuex';
   import products from "../store/modules/products";
   import {getProductInformativeTitle} from "../../../../utils/title-formatter";
   import {getUrlViewProduct} from "../../../../utils/url-generator";
@@ -88,6 +88,7 @@
     },
     computed: {
       ...mapState("products", ["categories", "categoryProducts", "staticStore"]),
+      ...mapGetters("products", ["freeCategoryProducts"]),
     },
     methods: {
       ...mapMutations("products", ["setNewProductInfo", "setOrderProducts"]),

@@ -11,6 +11,8 @@ const state = () => ({
 
     orderProducts: [],
 
+    busyProductsIds: [],
+
     newOrderProduct: {
         categoryId:  "",
         productId:   "",
@@ -33,7 +35,11 @@ const state = () => ({
 });
 
 const getters = {
-
+    freeCategoryProducts(state) {
+        return state.categoryProducts.filter(
+            item => state.busyProductsIds.indexOf(item.id) === -1
+        );
+    },
 };
 
 // TODO Понять из-за чего не работает передача параметра orderProductId если он перед { state, dispatch }
@@ -48,6 +54,7 @@ const actions = {
 
         if (result.data && result.status === StatusCodes.OK) {
             commit("setOrderProducts", result.data.orderProducts);
+            commit("setBusyProductsIds");
         }
     },
 
@@ -121,6 +128,10 @@ const mutations = {
         state.newOrderProduct.productId = formData.productId;
         state.newOrderProduct.quantity = formData.quantity;
         state.newOrderProduct.pricePerOne = formData.pricePerOne;
+    },
+
+    setBusyProductsIds(state) {
+        state.busyProductsIds = state.orderProducts.map(item => item.product.id);
     },
 };
 
