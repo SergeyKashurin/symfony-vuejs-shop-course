@@ -58,7 +58,7 @@ class Product
      * @ORM\Column(type="integer")
      *
      * @ApiProperty(identifier=false)
-     * @Groups({"product:list", "product:item", "order:item"})
+     * @Groups({"product:list", "product:item", "order:item", "cart_product:item", "cart_product:list", "cart:item", "cart:list"})
      */
     private $id;
 
@@ -113,6 +113,8 @@ class Product
 
     /**
      * @ORM\OneToMany(targetEntity=ProductImage::class, mappedBy="product", cascade={"persist"}, orphanRemoval=true)
+     *
+     * @Groups({"cart_product:item", "cart_product:list", "cart:item", "cart:list"})
      */
     private $productImages;
 
