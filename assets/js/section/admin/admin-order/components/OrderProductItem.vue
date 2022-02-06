@@ -64,8 +64,8 @@
       },
       remove(event) {
         event.preventDefault();
-        products.actions.removeOrderProduct(this.orderProduct.id);
-      },
+        this.removeOrderProduct(this.orderProduct.id);
+      }
     }
   }
 </script>

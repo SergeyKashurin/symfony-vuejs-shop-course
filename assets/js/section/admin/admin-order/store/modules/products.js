@@ -99,13 +99,15 @@ const actions = {
     },
 
     async removeOrderProduct({ dispatch }, orderProductId) {
+        console.log(state.staticStore.url.apiOrderProduct);
         const url = concatUrlByParams(
-            staticStore.urlAPIOrderProduct,
+            state.staticStore.url.apiOrderProduct,
             orderProductId
         );
+        console.log(url);
         const result = await axios.delete(url, apiConfig);
         if (result.status === StatusCodes.NO_CONTENT) {
-            console.log('Deleted');
+            dispatch('getOrderProducts');
         }
     }
 };
