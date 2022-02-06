@@ -25,5 +25,11 @@
 {% endblock %}
 
 {% block javascripts %}
+    <script>
+        if(typeof window.staticStore === 'undefined') {
+            window.staticStore = {};
+        }
+        window.staticStore.urlCart = "{{ path("api_carts_get_collection") }}";
+    </script>
     {{ encore_entry_script_tags('appMainCartShow') }}
 {% endblock %}

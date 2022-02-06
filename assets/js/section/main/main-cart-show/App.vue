@@ -20,15 +20,21 @@
 <script>
 import CartProductList from "./components/CartProductList";
 import CartTotalPrice from "./components/CartTotalPrice";
+import {mapState, mapActions, mapGetters, mapMutations} from "vuex";
+
 export default {
   name: "App",
   components: {CartTotalPrice, CartProductList},
+  created() {
+    this.getCart();
+  },
   computed: {
     showCartContent() {
       return true;
     },
   },
   methods: {
+    ...mapActions("cart", ["getCart"]),
     makeOrder() {
       return true;
     },

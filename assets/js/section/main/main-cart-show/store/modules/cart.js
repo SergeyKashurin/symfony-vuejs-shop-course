@@ -3,7 +3,13 @@ import {StatusCodes} from "http-status-codes";
 import {apiConfig} from "../../../../../utils/settings";
 
 const state = () => ({
+    cart: {},
 
+    staticStore: {
+      url: {
+          apiCart: window.staticStore.urlCart,
+      },
+    },
 });
 
 const getters = {
@@ -12,11 +18,22 @@ const getters = {
 
 
 const actions = {
+    async getCart({ state, commit }) {
+      const url = state.staticStore.url.apiCart;
 
+      const result = await axios.get(url, apiConfig);
+
+      if(result.data && result.status === StatusCodes.OK) {
+          console.log(state.cart);
+          commit('setCart', result.data["hydra:member"]);
+      }
+    },
 };
 
 const mutations = {
-
+    setCart(state, cart) {
+        state.cart = cart;
+    }
 };
 
 export default {
