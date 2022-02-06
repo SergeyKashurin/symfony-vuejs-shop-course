@@ -24,8 +24,7 @@ const actions = {
       const result = await axios.get(url, apiConfig);
 
       if(result.data && result.status === StatusCodes.OK) {
-          console.log(state.cart);
-          commit('setCart', result.data["hydra:member"]);
+          commit('setCart', result.data["hydra:member"][0]);
       }
     },
 };
