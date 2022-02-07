@@ -27,6 +27,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *          "delete"={
  *
  *          },
+ *          "patch"={
+ *
+ *          },
  *     },
  * )
  */
