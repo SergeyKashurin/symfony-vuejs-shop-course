@@ -31,6 +31,7 @@
         v-model="quantity"
         type="number"
         class="form-control"
+        value="0"
         min="1"
         step="1"
         @focusout="updateQuantity"

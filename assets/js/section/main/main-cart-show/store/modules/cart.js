@@ -3,8 +3,16 @@ import {StatusCodes} from "http-status-codes";
 import {apiConfig, apiConfigPatch} from "../../../../../utils/settings";
 import {concatUrlByParams} from "../../../../../utils/url-generator";
 
+function getAlertStructure() {
+    return {
+        type: null,
+        message: null
+    };
+}
+
 const state = () => ({
     cart: {},
+    alert: getAlertStructure(),
 
     staticStore: {
       url: {
@@ -17,7 +25,21 @@ const state = () => ({
 });
 
 const getters = {
+    totalPrice(state) {
+        let result = 0;
+        console.log(state.cart);
+        if(!state.cart.cartProducts) {
+            return 0;
+        }
 
+        state.cart.cartProducts.forEach(
+            cartProduct => {
+                result += cartProduct.product.price * cartProduct.quantity
+            }
+        )
+
+        return result;
+    },
 };
 
 
@@ -31,7 +53,7 @@ const actions = {
           commit('setCart', result.data["hydra:member"][0]);
       }
     },
-    async removeCartProduct({ state, dispatch }, cartProductId) {
+    async removeCartProduct({ state, commit, dispatch }, cartProductId) {
         const url = concatUrlByParams(
             state.staticStore.url.apiCartProduct,
             cartProductId
@@ -56,7 +78,6 @@ const actions = {
         const result = await axios.patch(url, data, apiConfigPatch);
 
         if(result.status === StatusCodes.OK) {
-            console.log(result);
             dispatch('getCart');
         }
     },
@@ -65,6 +86,15 @@ const actions = {
 const mutations = {
     setCart(state, cart) {
         state.cart = cart;
+    },
+    cleanAlert(state) {
+        state.alert = getAlertStructure();
+    },
+    setAlert(state, model) {
+        state.alert = {
+            type: model.type,
+            message: model.message
+        }
     }
 };
 

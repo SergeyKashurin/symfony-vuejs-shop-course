@@ -2,6 +2,7 @@
   <div class="row">
     <div class="col-lg-12 order-block">
       <div class="order-content">
+        <Alert />
         <div v-if="showCartContent">
           <CartProductList/>
           <CartTotalPrice/>
@@ -21,10 +22,11 @@
   import CartProductList from "./components/CartProductList";
   import CartTotalPrice from "./components/CartTotalPrice";
   import {mapState, mapActions, mapGetters, mapMutations} from "vuex";
+  import Alert from "./components/Alert";
 
   export default {
     name: "App",
-    components: {CartTotalPrice, CartProductList},
+    components: {Alert, CartTotalPrice, CartProductList},
     created() {
       this.getCart();
     },
