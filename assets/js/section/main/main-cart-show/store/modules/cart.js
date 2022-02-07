@@ -14,9 +14,12 @@ const state = () => ({
     cart: {},
     alert: getAlertStructure(),
 
+    isSentForm: false,
+
     staticStore: {
       url: {
           apiCart:            window.staticStore.urlCart,
+          apiOrder:           window.staticStore.urlOrder,
           apiCartProduct:     window.staticStore.urlCartProduct,
           viewProduct:        window.staticStore.urlViewProduct,
           assetImageProducts: window.staticStore.urlAssetImageProducts,
@@ -53,6 +56,19 @@ const actions = {
           commit('setCart', result.data["hydra:member"][0]);
       }
     },
+    async cleanCart({ state, commit }) {
+        const url = concatUrlByParams(
+            state.staticStore.url.apiCart
+            + '/'
+            + state.cart.id
+        );
+
+        const result = await axios.delete(url, apiConfig);
+
+        if(result.status === StatusCodes.NO_CONTENT) {
+            commit('setCart', {});
+        }
+    },
     async removeCartProduct({ state, commit, dispatch }, cartProductId) {
         const url = concatUrlByParams(
             state.staticStore.url.apiCartProduct,
@@ -81,6 +97,24 @@ const actions = {
             dispatch('getCart');
         }
     },
+    async makeOrder({ state, commit, dispatch }) {
+        const url = state.staticStore.url.apiOrder;
+        const data = {
+            cartId: state.cart.id,
+        };
+
+        const result = await axios.post(url, data, apiConfig);
+
+        if(result.data && result.status === StatusCodes.CREATED) {
+
+            commit('setAlert', {
+                type: 'success',
+                message: 'Thank you for purchase! Our manager will contact with you in 24 hours.',
+            });
+            commit('setIsSentForm', true);
+            dispatch('cleanCart');
+        }
+    },
 };
 
 const mutations = {
@@ -95,7 +129,10 @@ const mutations = {
             type: model.type,
             message: model.message
         }
-    }
+    },
+    setIsSentForm(state, value) {
+        state.isSentForm = value;
+    },
 };
 
 export default {

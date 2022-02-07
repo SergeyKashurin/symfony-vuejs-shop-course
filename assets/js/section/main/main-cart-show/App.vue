@@ -31,15 +31,13 @@
       this.getCart();
     },
     computed: {
+      ...mapState("cart", ["isSentForm"]),
       showCartContent() {
-        return true;
+        return !this. isSentForm;
       },
     },
     methods: {
-      ...mapActions("cart", ["getCart"]),
-      makeOrder() {
-        return true;
-      },
+      ...mapActions("cart", ["getCart", "makeOrder"]),
     },
   }
 </script>
