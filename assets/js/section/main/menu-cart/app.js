@@ -2,9 +2,9 @@ import Vue from "vue";
 import App from './App';
 import store from "./store";
 
-if (document.getElementById('app')) {
+if (document.getElementById('appMainMenuCart')) {
     new Vue({
-        el: "#app",
+        el: "#appMainMenuCart",
         store,
         render: h => h(App)
     })
