@@ -21,7 +21,7 @@ const state = () => ({
 const getters = {
     totalPrice(state) {
         let result = 0;
-        console.log(state.cart);
+
         if(!state.cart.cartProducts) {
             return 0;
         }
@@ -38,7 +38,7 @@ const getters = {
 
 
 const actions = {
-    async getCart({ state, commit }) {
+    async getCart({ state, commit, dispatch }) {
         const url = state.staticStore.url.apiCart;
 
         const result = await axios.get(url, apiConfig);
@@ -49,6 +49,8 @@ const actions = {
             && result.status === StatusCodes.OK
         ) {
             commit('setCart', result.data["hydra:member"][0]);
+        } else {
+            dispatch("createCart");
         }
     },
     async cleanCart({ state, commit }) {
@@ -76,7 +78,43 @@ const actions = {
             dispatch('getCart');
         }
     },
-    async addCartProduct({state, dispatch}, productData) {
+    addCartProduct({state, dispatch}, productData) {
+
+        const existCartProduct = state.cart.cartProducts.find(
+            cartProduct => cartProduct.product.uuid === productData.uuid
+        );
+
+        if(existCartProduct) {
+            dispatch('addExistCartProduct', existCartProduct);
+        } else {
+            dispatch('addNewCartProduct', productData);
+        }
+    },
+    async createCart({ state, dispatch }) {
+        const url = state.staticStore.url.apiCart;
+        const result = await axios.post(url, {}, apiConfig);
+
+        if(result.data && result.status === StatusCodes.CREATED) {
+            dispatch('getCart');
+        }
+    },
+    async addExistCartProduct({state, dispatch}, existCartProduct) {
+        const url = concatUrlByParams(
+            state.staticStore.url.apiCartProduct,
+            existCartProduct.id
+        );
+
+        const data = {
+            "quantity" : parseInt(existCartProduct.quantity) + 1,
+        };
+
+        const result = await axios.patch(url, data, apiConfigPatch);
+
+        if(result.status === StatusCodes.OK) {
+            dispatch('getCart');
+        }
+    },
+    async addNewCartProduct({state, dispatch}, productData) {
         const url = state.staticStore.url.apiCartProduct;
         const data = {
             cart: "/api/carts/" + state.cart.id,
