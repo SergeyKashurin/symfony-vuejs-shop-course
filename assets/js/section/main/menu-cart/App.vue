@@ -10,7 +10,13 @@
 
       <CartTotalPrice />
 
-      <CartActions />
+      <div v-if="countCartProducts">
+        <CartActions />
+      </div>
+      <div class="text-center" v-else>
+        Your cart is empty...
+      </div>
+
     </div>
   </div>
 </template>

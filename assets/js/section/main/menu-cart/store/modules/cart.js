@@ -49,11 +49,6 @@ const actions = {
             && result.status === StatusCodes.OK
         ) {
             commit('setCart', result.data["hydra:member"][0]);
-        } else {
-            // commit('setAlert', {
-            //     type: 'info',
-            //     message: 'Your cart is empty ...',
-            // });
         }
     },
     async cleanCart({ state, commit }) {
