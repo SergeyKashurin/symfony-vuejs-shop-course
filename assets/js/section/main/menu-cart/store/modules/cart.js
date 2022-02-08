@@ -80,12 +80,19 @@ const actions = {
     },
     addCartProduct({state, dispatch}, productData) {
 
+        if(!productData.quantity) {
+            productData.quantity = 1;
+        }
+
         const existCartProduct = state.cart.cartProducts.find(
             cartProduct => cartProduct.product.uuid === productData.uuid
         );
 
         if(existCartProduct) {
-            dispatch('addExistCartProduct', existCartProduct);
+            dispatch('addExistCartProduct', {
+                cartProductId: existCartProduct.id,
+                quantity: existCartProduct.quantity + productData.quantity
+            });
         } else {
             dispatch('addNewCartProduct', productData);
         }
@@ -98,14 +105,14 @@ const actions = {
             dispatch('getCart');
         }
     },
-    async addExistCartProduct({state, dispatch}, existCartProduct) {
+    async addExistCartProduct({state, dispatch}, cartProductData) {
         const url = concatUrlByParams(
             state.staticStore.url.apiCartProduct,
-            existCartProduct.id
+            cartProductData.cartProductId
         );
 
         const data = {
-            "quantity" : parseInt(existCartProduct.quantity) + 1,
+            "quantity" : parseInt(cartProductData.quantity),
         };
 
         const result = await axios.patch(url, data, apiConfigPatch);
@@ -119,7 +126,7 @@ const actions = {
         const data = {
             cart: "/api/carts/" + state.cart.id,
             product: "/api/products/" + productData.uuid,
-            quantity: 1,
+            quantity: productData.quantity,
         };
         const result = await axios.post(url, data, apiConfig);
 
