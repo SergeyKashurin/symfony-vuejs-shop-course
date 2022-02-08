@@ -76,6 +76,19 @@ const actions = {
             dispatch('getCart');
         }
     },
+    async addCartProduct({state, dispatch}, productData) {
+        const url = state.staticStore.url.apiCartProduct;
+        const data = {
+            cart: "/api/carts/" + state.cart.id,
+            product: "/api/products/" + productData.uuid,
+            quantity: 1,
+        };
+        const result = await axios.post(url, data, apiConfig);
+
+        if(result.data && result.status === StatusCodes.CREATED) {
+            dispatch('getCart');
+        }
+    },
 };
 
 const mutations = {
