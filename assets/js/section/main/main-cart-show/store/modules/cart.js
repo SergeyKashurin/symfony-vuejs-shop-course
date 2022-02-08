@@ -52,8 +52,17 @@ const actions = {
 
       const result = await axios.get(url, apiConfig);
 
-      if(result.data && result.status === StatusCodes.OK) {
+      if(
+          result.data
+          && result.data["hydra:member"].length
+          && result.status === StatusCodes.OK
+      ) {
           commit('setCart', result.data["hydra:member"][0]);
+      } else {
+          commit('setAlert', {
+              type: 'info',
+              message: 'Your cart is empty ...',
+          });
       }
     },
     async cleanCart({ state, commit }) {
@@ -100,21 +109,20 @@ const actions = {
     async makeOrder({ state, commit, dispatch }) {
         const url = state.staticStore.url.apiOrder;
         const data = {
-            cartId: state.cart.id,
+            cartId: state.cart.id
         };
 
         const result = await axios.post(url, data, apiConfig);
 
-        if(result.data && result.status === StatusCodes.CREATED) {
-
+        if (result.data && result.status === StatusCodes.CREATED) {
             commit('setAlert', {
                 type: 'success',
-                message: 'Thank you for purchase! Our manager will contact with you in 24 hours.',
+                message: 'Thank you for your purchase! Our manager will contact with you in 24 hours.'
             });
             commit('setIsSentForm', true);
             dispatch('cleanCart');
         }
-    },
+    }
 };
 
 const mutations = {

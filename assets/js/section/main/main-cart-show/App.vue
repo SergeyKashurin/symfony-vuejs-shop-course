@@ -31,9 +31,9 @@
       this.getCart();
     },
     computed: {
-      ...mapState("cart", ["isSentForm"]),
+      ...mapState("cart", ["cart", "isSentForm"]),
       showCartContent() {
-        return !this. isSentForm;
+        return !this. isSentForm && Object.keys(this.cart).length;
       },
     },
     methods: {
