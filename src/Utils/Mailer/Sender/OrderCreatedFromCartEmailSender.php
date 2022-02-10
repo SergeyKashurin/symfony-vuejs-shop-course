@@ -14,9 +14,9 @@ class OrderCreatedFromCartEmailSender
             ->setRecipent($order->getOwner()->getEmail())
             ->setCc('manager@ranked-choice.com')
             ->setSubject('Ranked Choice Shop - Thank you for your purchase!')
-            ->setHtmlTemplate('main/...')
+            ->setHtmlTemplate('main/email/client/created_order_from_cart.html.twig')
             ->setContext([
-
+                'order' => $order,
             ]);
         dd('sendEmailToClient', $mailerOptions);
     }
