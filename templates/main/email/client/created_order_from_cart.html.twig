@@ -1,7 +1,63 @@
-<h1>Ranked Choice Shop - Thank you for your purchase!</h1>
+{% extends 'main/email/base.html.twig' %}
 
-<p>
-    {% for orderProduct in order.orderProducts %}
-        {{ orderProduct.product.title }}<br/>
-    {% endfor %}
-</p>
+{% block content %}
+    <row>
+        <columns>
+            <spacer size="35">
+                <center>
+                    <h1>Ranked Choice Shop - Thank you for your purchase!</h1>
+                </center>
+                <spacer size="10"></spacer>
+            </spacer>
+        </columns>
+    </row>
+    <row>
+        <columns>
+            <p>
+                Thank you for your purchase! Our manager will contact with you in 24 hours.
+            </p>
+        </columns>
+    </row>
+    <row>
+        <colums>
+            <center>
+                <h2>Order info:</h2>
+            </center>
+        </colums>
+    </row>
+    <row>
+        <colums>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Title</td>
+                        <td>Quantity</td>
+                        <td>Price</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orderProduct in order.orderProducts %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ orderProduct.product.title }}</td>
+                            <td>{{ orderProduct.quantity }}</td>
+                            <td>{{ orderProduct.price }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <spacer size="10"></spacer>
+            <p>
+                <strong>Total price: {{ order.totalPrice }}</strong>
+            </p>
+        </colums>
+    </row>
+    <row>
+        <columns>
+            <a href="{{ profileUrl }}" target="_blank">
+                Visit our homepage!
+            </a>
+        </columns>
+    </row>
+{% endblock %}
