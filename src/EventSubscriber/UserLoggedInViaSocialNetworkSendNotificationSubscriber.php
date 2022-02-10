@@ -1,0 +1,44 @@
+<?php
+
+namespace App\EventSubscriber;
+
+use App\Event\UserLoggedInViaSocialNetworkEvent;
+use App\Utils\Mailer\Sender\UserLoggedInViaSocialNetworkEmailSender;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+class UserLoggedInViaSocialNetworkSendNotificationSubscriber implements EventSubscriberInterface
+{
+    /**
+     * @var UserLoggedInViaSocialNetworkEmailSender
+     */
+    private $emailSender;
+
+    /**
+     * @param UserLoggedInViaSocialNetworkEmailSender $emailSender
+     */
+    public function __construct(UserLoggedInViaSocialNetworkEmailSender $emailSender)
+    {
+        $this->emailSender = $emailSender;
+    }
+
+    /**
+     * @param UserLoggedInViaSocialNetworkEvent $event
+     */
+    public function onUserLoggedInViaSocialNetworkEvent(UserLoggedInViaSocialNetworkEvent $event)
+    {
+        $user = $event->getUser();
+        $plainPassword = $event->getPlainPassword();
+
+        $this->emailSender->sendEmailToClient($user, $plainPassword);
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            UserLoggedInViaSocialNetworkEvent::class => 'onUserLoggedInViaSocialNetworkEvent'
+        ];
+    }
+}
