@@ -11,6 +11,9 @@ parameters:
     uploads_images_dir: '%uploads_dir%/images'
     product_images_dir: '%uploads_images_dir%/products'
 
+    locale: 'en'
+    app_locales: en|fr|ru
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -19,6 +22,7 @@ services:
         bind:
             string $uploadsTempDir: '%uploads_temp_dir%'
             string $productImagesDir: '%product_images_dir%'
+            string $defaultLocale: '%locale%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
