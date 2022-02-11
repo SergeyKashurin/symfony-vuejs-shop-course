@@ -62,4 +62,4 @@ security:
     access_control:
         - { path: ^/admin/login }
         - { path: ^/admin/user, roles: ROLE_SUPER_ADMIN }
-        - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/%app_locales.in_brackets%/profile, roles: ROLE_USER }
