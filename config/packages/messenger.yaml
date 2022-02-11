@@ -20,3 +20,4 @@ framework:
             # Route your messages to the transports
             # 'App\Message\YourMessage': async
             'App\Messenger\Message\Event\UserRegisteredEvent': async
+            'App\Messenger\Message\Command\ResetUserPassword': async

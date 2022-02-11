@@ -5,13 +5,14 @@ namespace App\Controller\Main;
 use App\Entity\User;
 use App\Form\Main\ChangePasswordFormType;
 use App\Form\Main\ResetPasswordRequestFormType;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Messenger\Message\Command\ResetUserPassword;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -26,13 +27,17 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
+    /**
+     * @var ResetPasswordHelperInterface
+     */
     private $resetPasswordHelper;
-    private $entityManager;
 
-    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper, EntityManagerInterface $entityManager)
+    /**
+     * @param ResetPasswordHelperInterface $resetPasswordHelper
+     */
+    public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -40,16 +45,18 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("", name="main_forgot_password_request")
      */
-    public function request(Request $request, MailerInterface $mailer): Response
+    public function request(Request $request, MailerInterface $mailer, MessageBusInterface $messageBus): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->processSendingPasswordResetEmail(
-                $form->get('email')->getData(),
-                $mailer
-            );
+            $email = $form->get('email')->getData();
+
+            $event = new ResetUserPassword($email);
+            $messageBus->dispatch($event);
+
+            return $this->redirectToRoute('main_check_email');
         }
 
         return $this->render('main/reset_password/request.html.twig', [
@@ -80,7 +87,7 @@ class ResetPasswordController extends AbstractController
      *
      * @Route("/reset/{token}", name="main_reset_password")
      */
-    public function reset(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, string $token = null): Response
+    public function reset(Request $request, UserPasswordEncoderInterface $passwordEncoder, string $token = null): Response
     {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -103,7 +110,7 @@ class ResetPasswordController extends AbstractController
                 $e->getReason()
             ));
 
-            return $this->redirectToRoute('app_forgot_password_request');
+            return $this->redirectToRoute('main_forgot_password_request');
         }
 
         // The token is valid; allow the user to change their password.
@@ -114,14 +121,14 @@ class ResetPasswordController extends AbstractController
             // A password reset token should be used only once, remove it.
             $this->resetPasswordHelper->removeResetRequest($token);
 
-            // Encode(hash) the plain password, and set it.
-            $encodedPassword = $userPasswordEncoder->encodePassword(
+            // Encode the plain password, and set it.
+            $encodedPassword = $passwordEncoder->encodePassword(
                 $user,
                 $form->get('plainPassword')->getData()
             );
 
             $user->setPassword($encodedPassword);
-            $this->entityManager->flush();
+            $this->getDoctrine()->getManager()->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -132,49 +139,5 @@ class ResetPasswordController extends AbstractController
         return $this->render('main/reset_password/reset.html.twig', [
             'resetForm' => $form->createView(),
         ]);
-    }
-
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
-    {
-        $user = $this->entityManager->getRepository(User::class)->findOneBy([
-            'email' => $emailFormData,
-        ]);
-
-        // Do not reveal whether a user account was found or not.
-        if (!$user) {
-            return $this->redirectToRoute('main_check_email');
-        }
-
-        try {
-            $resetToken = $this->resetPasswordHelper->generateResetToken($user);
-        } catch (ResetPasswordExceptionInterface $e) {
-            // If you want to tell the user why a reset email was not sent, uncomment
-            // the lines below and change the redirect to 'app_forgot_password_request'.
-            // Caution: This may reveal if a user is registered or not.
-            //
-            // $this->addFlash('reset_password_error', sprintf(
-            //     'There was a problem handling your password reset request - %s',
-            //     $e->getReason()
-            // ));
-
-            return $this->redirectToRoute('main_check_email');
-        }
-
-        $email = (new TemplatedEmail())
-            ->from(new Address('robot@ranked-choice.com', 'Robot'))
-            ->to($user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('main/email/security/reset_password.html.twig')
-            ->context([
-                'resetToken' => $resetToken,
-            ])
-        ;
-
-        $mailer->send($email);
-
-        // Store the token object in session for retrieval in check-email route.
-        $this->setTokenObjectInSession($resetToken);
-
-        return $this->redirectToRoute('main_check_email');
     }
 }
