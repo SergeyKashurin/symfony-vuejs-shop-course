@@ -15,6 +15,9 @@ parameters:
     app_locales: en|fr|ru
     app_locales.in_brackets: '(%app_locales%)'
 
+    router.request_contex.scheme: '%env(SITE_BASE_SCHEME)%'
+    router.request_contex.host: '%env(SITE_BASE_HOST)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:

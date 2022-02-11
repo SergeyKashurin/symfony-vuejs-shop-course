@@ -4,13 +4,14 @@ namespace App\Controller\Main;
 
 use App\Entity\User;
 use App\Form\Main\RegistrationFormType;
-use App\Repository\UserRepository;
+use App\Messenger\Message\Event\UserRegisteredEvent;
 use App\Security\Verifier\EmailVerifier;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\UserRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -18,7 +19,7 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
+    private $emailVerifier;
 
     public function __construct(EmailVerifier $emailVerifier)
     {
@@ -27,14 +28,17 @@ class RegistrationController extends AbstractController
 
     /**
      * @Route({
-     *     "en": "/registration",
-     *     "fr": "/creation-de-compte",
-     *     "ru": "/registration",
+     *  "en": "/registration",
+     *  "fr": "/création-de-compte",
+     *  "ru": "/registration",
      *     }, name="main_registration")
      */
-    public function registration(Request $request, UserPasswordEncoderInterface $userPasswordEncoder, EntityManagerInterface $entityManager): Response
+    public function registration(
+        Request $request,
+        UserPasswordEncoderInterface $passwordEncoder,
+        MessageBusInterface $messageBus
+    ): Response
     {
-
         if ($this->getUser()) {
             return $this->redirectToRoute('main_profile_index');
         }
@@ -46,26 +50,20 @@ class RegistrationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
-            $userPasswordEncoder->encodePassword(
+                $passwordEncoder->encodePassword(
                     $user,
                     $form->get('plainPassword')->getData()
                 )
             );
 
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('main_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('rebot@ranked-choice.com', 'Robot'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('main/email/security/confirmation_email.html.twig')
-            );
-            // do anything else you need here, like send an email
+            $event = new UserRegisteredEvent($user->getId());
+            $messageBus->dispatch($event);
 
-            $this->addFlash('success', 'An email has bee sent. Please check your inbox to complete your registration.');
+            $this->addFlash('success', 'An email has been sent. Please check your inbox to complete registration.');
 
             return $this->redirectToRoute('main_homepage');
         }
@@ -94,9 +92,8 @@ class RegistrationController extends AbstractController
 
         // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $this->emailVerifier->handleEmailConfirmation($request, $user);
+            $this->emailVerifier->handleEmailConfirmation($request->getUri(), $user);
         } catch (VerifyEmailExceptionInterface $exception) {
-
             $this->addFlash('warning', $exception->getReason());
 
             return $this->redirectToRoute('main_homepage');
