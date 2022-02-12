@@ -1,0 +1,21 @@
+App\Entity\User:
+  user_1:
+    email:      'test_user1@mail.xyz'
+    #password decoded: 123456 | add "\" before "$"
+    password:   '\$argon2id\$v=19\$m=65536,t=4,p=1\$zTmLuQKS9z7XBpTCBu7PhQ\$tmAsLEHGY/8tO2nR8r7WsXun0w8C5lhjnPAe+sAZjNo'
+    isVerified: 1
+    roles:      "[ROLE_USER]"
+
+  user_admin_1:
+    email:      'test_admin1@mail.xyz'
+    #password decoded: 123456 | add "\" before "$"
+    password:   '\$argon2id\$v=19\$m=65536,t=4,p=1\$zTmLuQKS9z7XBpTCBu7PhQ\$tmAsLEHGY/8tO2nR8r7WsXun0w8C5lhjnPAe+sAZjNo'
+    isVerified: 1
+    roles:      "[ROLE_ADMIN]"
+
+  user_super_admin_1:
+    email:      'test_super_admin1@mail.xyz'
+    #password decoded: 123456 | add "\" before "$"
+    password:   '\$argon2id\$v=19\$m=65536,t=4,p=1\$zTmLuQKS9z7XBpTCBu7PhQ\$tmAsLEHGY/8tO2nR8r7WsXun0w8C5lhjnPAe+sAZjNo'
+    isVerified: 1
+    roles:      "[ROLE_SUPER_ADMIN]"

@@ -1,0 +1,5 @@
+App\Entity\Category:
+  category_jeans:
+    title: Jeans
+  category_sneakers:
+    title: Sneakers
