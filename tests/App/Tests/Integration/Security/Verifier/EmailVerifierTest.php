@@ -6,6 +6,8 @@ use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
+use App\Security\Verifier\EmailVerifier;
+use App\Tests\TestUtils\Fixtures\UserFixtures;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
@@ -14,21 +16,44 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 class EmailVerifierTest extends KernelTestCase
 {
 
+    /**
+     * @var EmailVerifier|object|null
+     */
+    private $emailVerifier;
+
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
     public function setUp(): void
     {
         parent::setUp();
         self:self::bootKernel();
-        $userRepository = self::$container->get(UserRepository::class);
-
-        dd($userRepository->findAll());
+        $this->emailVerifier = self::$container->get(EmailVerifier::class);
+        $this->userRepository = self::$container->get(UserRepository::class);
     }
 
-    public function testSomething(): void
+    public function testGenerateEmailSignature(): void
     {
-        $kernel = self::bootKernel();
+        $user = $this->userRepository->findOneBy(['email' => UserFixtures::USER_1_EMAIL]);
+        $user->setIsVerified(false);
 
-        $this->assertSame('test', $kernel->getEnvironment());
-        //$routerService = self::$container->get('router');
-        //$myCustomService = self::$container->get(CustomService::class);
+        $currentDateTime = new \DateTimeImmutable();
+        $emailSignature = $this->emailVerifier->generateEmailSignature('main_verify_email', $user);
+
+        $this->assertGreaterThan($currentDateTime, $emailSignature->getExpiresAt());
+    }
+
+    public function testHandleEmailConfirmation(): void
+    {
+        $user = $this->userRepository->findOneBy(['email' => UserFixtures::USER_1_EMAIL]);
+        $user->setIsVerified(false);
+
+        $currentDateTime = new \DateTimeImmutable();
+        $emailSignature = $this->emailVerifier->generateEmailSignature('main_verify_email', $user);
+
+        $this->emailVerifier->handleEmailConfirmation($emailSignature->getSignedUrl(), $user);
+        $this->assertTrue($user->isVerified());
     }
 }
