@@ -3,6 +3,10 @@
 {% block title_detailed %}All Orders{% endblock %}
 
 {% block body %}
+    {% include 'admin/order/_embed/_table_filtration.html.twig' with {
+        'form': form
+    } %}
+
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             {% include 'admin/_embed/_card/_header_action.html.twig' with {
@@ -15,12 +19,12 @@
                 <table class="table table-bordered" id="main_table">
                     <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Created at</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Id', 'o.id') }}</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Created at', 'o.createdAt') }}</th>
                         <th>Count of products</th>
-                        <th>Total price</th>
-                        <th>User</th>
-                        <th>Status</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Total price', 'o.totalPrice') }}</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'User', 'u.id') }}</th>
+                        <th>{{ knp_pagination_sortable(pagination, 'Status', 'o.status') }}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -34,10 +38,10 @@
                                 {{ order.createdAt|date('H:i:s d/m/Y') }}
                             </td>
                             <td>
-                                {{ order.getOrderProducts.getValues()|length }}
+                                {{ order.getOrderProducts().getValues()|length }}
                             </td>
                             <td>
-                                {{ order.TotalPrice|format_currency('USD') }}
+                                {{ order.totalPrice|format_currency('USD') }}
                             </td>
                             <td>
                                 #{{ order.owner.id }} {{ order.owner.email }}
@@ -58,4 +62,22 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        const filterVisibilityBtnElement = document.getElementById('order_list_filters_btn');
+        const filterVisibilityBlockElement = document.getElementById('order_list_filters_block');
+        const filterSection = 'order_list';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            filterVisibilityBtnElement.addEventListener('click', () => {
+                toggleFiltersVisibility(filterSection);
+                changeFiltersBlockVisibility(filterSection, filterVisibilityBlockElement);
+            });
+
+            changeFiltersBlockVisibility(filterSection, filterVisibilityBlockElement);
+        })
+    </script>
 {% endblock %}
