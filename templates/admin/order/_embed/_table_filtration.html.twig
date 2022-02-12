@@ -1,6 +1,6 @@
-<div class="cart shadow mb4">
+<div class="cart shadow mb-4">
     <div class="card-header py-3">
-        Header
+        {% include 'admin/_embed/_filters/_header.html.twig' %}
     </div>
     <div class="card-body" id="order_list_filters_block">
         {{ form_start(form) }}
@@ -62,7 +62,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="2">
-                                ACTIONS
+                                {% include 'admin/_embed/_filters/_table_actions_btn.html.twig' %}
                             </td>
                         </tr>
                     </tfoot>
