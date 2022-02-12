@@ -2,13 +2,16 @@
 
 namespace App\Tests\App\Tests\Integration\Security\Verifier;
 
+use App\Entity\User;
 use App\Repository\CategoryRepository;
 use App\Repository\OrderRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use App\Security\Verifier\EmailVerifier;
 use App\Tests\TestUtils\Fixtures\UserFixtures;
+use App\Utils\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 
 /**
  * @group integration
@@ -17,7 +20,7 @@ class EmailVerifierTest extends KernelTestCase
 {
 
     /**
-     * @var EmailVerifier|object|null
+     * @var EmailVerifier
      */
     private $emailVerifier;
 
@@ -29,7 +32,7 @@ class EmailVerifierTest extends KernelTestCase
     public function setUp(): void
     {
         parent::setUp();
-        self:self::bootKernel();
+        self::bootKernel();
         $this->emailVerifier = self::$container->get(EmailVerifier::class);
         $this->userRepository = self::$container->get(UserRepository::class);
     }
@@ -54,6 +57,34 @@ class EmailVerifierTest extends KernelTestCase
         $emailSignature = $this->emailVerifier->generateEmailSignature('main_verify_email', $user);
 
         $this->emailVerifier->handleEmailConfirmation($emailSignature->getSignedUrl(), $user);
+        $this->assertTrue($user->isVerified());
+    }
+
+    public function testGenerateEmailSignatureAndHandleEmailConfirmation()
+    {
+        $user = $this->userRepository->findOneBy(['email' => UserFixtures::USER_1_EMAIL]);
+        $user->setIsVerified(false);
+
+        $emailSignature = $this->checkGenerateEmailSignature($user);
+
+        $this->checkHandleEmailConfirmation($emailSignature, $user);
+    }
+
+    private function checkGenerateEmailSignature(User $user): VerifyEmailSignatureComponents
+    {
+        $currentDateTime = new \DateTimeImmutable();
+        $emailSignature = $this->emailVerifier->generateEmailSignature('main_verify_email', $user);
+
+        $this->assertGreaterThan($currentDateTime, $emailSignature->getExpiresAt());
+
+        return $emailSignature;
+    }
+
+    private function checkHandleEmailConfirmation(VerifyEmailSignatureComponents $verifyEmailSignatureComponents, User $user): void
+    {
+        $this->assertFalse($user->isVerified());
+
+        $this->emailVerifier->handleEmailConfirmation($verifyEmailSignatureComponents->getSignedUrl(), $user);
         $this->assertTrue($user->isVerified());
     }
 }
