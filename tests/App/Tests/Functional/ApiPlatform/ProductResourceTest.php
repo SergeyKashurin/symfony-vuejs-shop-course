@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @group functional
  */
-class ProductResourceTest extends ResourceTestUtils
+class ProductResourceTest //extends ResourceTestUtils
 {
     /**
      * @var string
