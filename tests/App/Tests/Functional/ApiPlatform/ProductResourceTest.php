@@ -2,8 +2,10 @@
 
 namespace App\Tests\Functional\ApiPlatform;
 
+use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
+use App\Tests\Functional\ApiPlatform\ResourceTestUtils;
 use App\Tests\TestUtils\Fixtures\UserFixtures;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -13,78 +15,78 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @group functional
  */
-class ProductResourceTest extends WebTestCase
+class ProductResourceTest extends ResourceTestUtils
 {
-
     /**
      * @var string
      */
     protected $uriKey = '/api/products';
 
-    public const REQUEST_HEADERS = [
-        'HTTP_ACCEPT' => 'application/ld+json',
-        'CONTENT_TYPE' => 'application/json',
-    ];
-
     public function testGetProducts()
     {
-        $client = static::createClient();
-        $client->request('GET', $this->uriKey, [], [], static::REQUEST_HEADERS);
+        $client = self::createClient();
 
-        #dd(json_decode($client->getResponse()->getContent()));
+        $client->request('GET', $this->uriKey, [], [], self::REQUEST_HEADERS);
+
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testGetProduct()
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         /** @var Product $product */
-        $product = static::$container->get(ProductRepository::class)->findOneBy([]);
+        $product = self::$container->get(ProductRepository::class)->findOneBy([]);
 
-        $uri = $this->uriKey.'/'.$product->getUuId();
+        $uri = $this->uriKey.'/'.$product->getUuid();
 
-        $client->request('GET', $uri, [], [], static::REQUEST_HEADERS);
-        #dd(json_decode($client->getResponse()->getContent()));
+        $client->request('GET', $uri, [], [], self::REQUEST_HEADERS);
+
         $this->assertResponseStatusCodeSame(200);
     }
 
     public function testCreateProduct()
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
         $this->checkDefaultUserHasNotAccess($client, $this->uriKey, 'POST');
 
-        $user = static::$container->get(UserRepository::class)->findOneBy(['email' => UserFixtures::USER_ADMIN_1_EMAIL]);
+        $user = self::$container->get(UserRepository::class)->findOneBy(['email' => UserFixtures::USER_ADMIN_1_EMAIL]);
 
-        $client->loginUser($user, 'main');
+        $client->loginUser($user, 'website');
 
         $context = [
-            'title' => 'New product',
+            'title' => 'New Product',
             'price' => '100',
-            'quantity' => 3,
-            'description' => 'some description',
+            'quantity' => 5
         ];
 
-        $client->request('POST', $this->uriKey, [], [], static::REQUEST_HEADERS, json_encode($context));
+        $client->request('POST', $this->uriKey, [], [], self::REQUEST_HEADERS, json_encode($context));
 
         $this->assertResponseStatusCodeSame(201);
     }
 
-    public function checkDefaultUserHasNotAccess(AbstractBrowser $client, string $uri, string $method)
+    public function testPatchProduct()
     {
-        $user = static::$container->get(UserRepository::class)->findOneBy(['email' => UserFixtures::USER_1_EMAIL]);
-        $client->loginUser($user, 'main');
+        $client = self::createClient();
 
-        $client->request($method, $uri, [], [], static::REQUEST_HEADERS, json_encode([]));
+        /** @var Product $product */
+        $product = self::$container->get(ProductRepository::class)->findOneBy([]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-    }
+        $uri = $this->uriKey.'/'.$product->getUuid();
 
-    public function getResponseDecodeContent(AbstractBrowser $client)
-    {
-        return json_decode(
-            $client->getResponse()->getContent()
-        );
+        $this->checkDefaultUserHasNotAccess($client, $uri, 'PATCH');
+
+        $user = self::$container->get(UserRepository::class)->findOneBy(['email' => UserFixtures::USER_ADMIN_1_EMAIL]);
+
+        $client->loginUser($user, 'website');
+
+        $context = [
+            'title' => 'Updated Product',
+        ];
+
+        $client->request('PATCH', $uri, [], [], self::REQUEST_HEADERS_PATCH, json_encode($context));
+
+        $this->assertResponseStatusCodeSame(200);
     }
 }
