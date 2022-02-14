@@ -4,12 +4,9 @@
       <div class="order-content">
         <Alert />
         <div v-if="showCartContent">
-          <CartProductList/>
-          <CartTotalPrice/>
-          <a
-            class="btn btn-success mb-3 text-white"
-            @click="makeOrder"
-          >
+          <CartProductList />
+          <CartTotalPrice />
+          <a class="btn btn-success mb-3 text-white" @click="makeOrder">
             MAKE ORDER
           </a>
         </div>
@@ -19,29 +16,27 @@
 </template>
 
 <script>
-  import CartProductList from "./components/CartProductList";
-  import CartTotalPrice from "./components/CartTotalPrice";
-  import {mapState, mapActions, mapGetters, mapMutations} from "vuex";
-  import Alert from "./components/Alert";
+import CartProductList from "./components/CartProductList";
+import CartTotalPrice from "./components/CartTotalPrice";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
+import Alert from "./components/Alert";
 
-  export default {
-    name: "App",
-    components: {Alert, CartTotalPrice, CartProductList},
-    created() {
-      this.getCart();
+export default {
+  name: "App",
+  components: { Alert, CartTotalPrice, CartProductList },
+  created() {
+    this.getCart();
+  },
+  computed: {
+    ...mapState("cart", ["cart", "isSentForm"]),
+    showCartContent() {
+      return !this.isSentForm && Object.keys(this.cart).length;
     },
-    computed: {
-      ...mapState("cart", ["cart", "isSentForm"]),
-      showCartContent() {
-        return !this. isSentForm && Object.keys(this.cart).length;
-      },
-    },
-    methods: {
-      ...mapActions("cart", ["getCart", "makeOrder"]),
-    },
-  }
+  },
+  methods: {
+    ...mapActions("cart", ["getCart", "makeOrder"]),
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

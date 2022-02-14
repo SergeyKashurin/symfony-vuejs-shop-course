@@ -20,18 +20,16 @@
 </template>
 
 <script>
-  import CartProductItem from "./CartProductItem";
-  import {mapState, mapActions, mapGetters, mapMutations} from "vuex";
+import CartProductItem from "./CartProductItem";
+import { mapState, mapActions, mapGetters, mapMutations } from "vuex";
 
-  export default {
-    name: "CartProductList",
-    components: {CartProductItem},
-    computed: {
-      ...mapState("cart", ["cart"]),
-    }
-  }
+export default {
+  name: "CartProductList",
+  components: { CartProductItem },
+  computed: {
+    ...mapState("cart", ["cart"]),
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

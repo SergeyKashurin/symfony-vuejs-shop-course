@@ -13,10 +13,7 @@
       <div v-if="countCartProducts">
         <CartActions />
       </div>
-      <div class="text-center" v-else>
-        Your cart is empty...
-      </div>
-
+      <div v-else class="text-center">Your cart is empty...</div>
     </div>
   </div>
 </template>
@@ -25,27 +22,23 @@
 import CartTotalPrice from "./components/CartTotalPrice";
 import CartActions from "./components/CartActions";
 import CartProductList from "./components/CartProductList";
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 export default {
   name: "App",
-  components: {CartProductList, CartActions, CartTotalPrice},
+  components: { CartProductList, CartActions, CartTotalPrice },
   created() {
     this.getCart();
   },
   computed: {
     ...mapState("cart", ["cart"]),
     countCartProducts() {
-      return this.cart.cartProducts
-        ? this.cart.cartProducts.length
-        : 0;
+      return this.cart.cartProducts ? this.cart.cartProducts.length : 0;
     },
   },
   methods: {
     ...mapActions("cart", ["getCart"]),
   },
-}
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

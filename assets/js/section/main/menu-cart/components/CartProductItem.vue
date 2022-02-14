@@ -2,10 +2,7 @@
   <div class="product">
     <div class="product-details">
       <h4 class="product-title">
-        <a
-          :href="urlShowProduct"
-          target="_blank"
-        >
+        <a :href="urlShowProduct" target="_blank">
           {{ cartProduct.product.title }}
         </a>
       </h4>
@@ -19,10 +16,7 @@
     </div>
 
     <figure class="product-image-container">
-      <a
-          :href="urlShowProduct"
-          target="_blank"
-      >
+      <a :href="urlShowProduct" target="_blank">
         <img
           :src="getUrlProductImage(productImage)"
           class="product-image"
@@ -31,19 +25,18 @@
       </a>
     </figure>
     <a
-        href="#"
-        class="btn-remove"
-        title="Remove product"
-        @click="removeCartProduct(cartProduct.id)"
+      href="#"
+      class="btn-remove"
+      title="Remove product"
+      @click="removeCartProduct(cartProduct.id)"
     >
       X
     </a>
-
   </div>
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "CartProductItem",
@@ -51,7 +44,7 @@ export default {
     cartProduct: {
       type: Object,
       default: () => {},
-    }
+    },
   },
   computed: {
     ...mapState("cart", ["staticStore"]),
@@ -60,24 +53,24 @@ export default {
       return productImages.length ? productImages[0] : null;
     },
     urlShowProduct() {
-      return this.staticStore.url.viewProduct + '/' + this.cartProduct.product.uuid;
+      return (
+        this.staticStore.url.viewProduct + "/" + this.cartProduct.product.uuid
+      );
     },
   },
   methods: {
     ...mapActions("cart", ["removeCartProduct"]),
     getUrlProductImage(productImage) {
       return (
-          this.staticStore.url.assetImageProducts
-          + '/'
-          + this.cartProduct.product.id
-          + '/'
-          + productImage.filenameSmall
+        this.staticStore.url.assetImageProducts +
+        "/" +
+        this.cartProduct.product.id +
+        "/" +
+        productImage.filenameSmall
       );
     },
-  }
-}
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
