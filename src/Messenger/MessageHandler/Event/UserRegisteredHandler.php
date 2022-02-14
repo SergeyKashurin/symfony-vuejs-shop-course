@@ -24,11 +24,6 @@ class UserRegisteredHandler implements MessageHandlerInterface
      */
     private $emailSender;
 
-    /**
-     * @param EmailVerifier $emailVerifier
-     * @param UserManager $userManager
-     * @param UserRegisteredEmailSender $emailSender
-     */
     public function __construct(EmailVerifier $emailVerifier, UserManager $userManager, UserRegisteredEmailSender $emailSender)
     {
         $this->emailVerifier = $emailVerifier;
@@ -36,9 +31,6 @@ class UserRegisteredHandler implements MessageHandlerInterface
         $this->emailSender = $emailSender;
     }
 
-    /**
-     * @param UserRegisteredEvent $event
-     */
     public function __invoke(UserRegisteredEvent $event)
     {
         $userId = $event->getUserId();

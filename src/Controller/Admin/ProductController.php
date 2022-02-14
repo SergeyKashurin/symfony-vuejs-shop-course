@@ -3,8 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Product;
-use App\Form\DTO\EditProductModel;
 use App\Form\Admin\EditProductFormType;
+use App\Form\DTO\EditProductModel;
 use App\Form\Handler\ProductFormHandler;
 use App\Repository\ProductRepository;
 use App\Utils\Manager\ProductManager;
@@ -18,11 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ProductController extends AbstractController
 {
-
     /**
-     * @param ProductRepository $productRepository
-     * @return Response
-     *
      * @Route("/list", name="list")
      */
     public function list(ProductRepository $productRepository): Response
@@ -32,17 +28,13 @@ class ProductController extends AbstractController
                 ['id' => 'DESC'],
                 50
             );
+
         return $this->render('admin/product/list.html.twig', [
             'products' => $products,
         ]);
     }
 
     /**
-     * @param Request $request
-     * @param ProductFormHandler $productFormHandler
-     * @param Product|null $product
-     * @return Response
-     *
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"})
      * @Route("/edit", name="edit_blank")
      * @Route("/add", name="add")
@@ -54,8 +46,7 @@ class ProductController extends AbstractController
         $form = $this->createForm(EditProductFormType::class, $editProductModel);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $product = $productFormHandler->processEditForm($editProductModel, $form);
 
             $this->addFlash('success', 'Your changes were saved!');
@@ -65,8 +56,7 @@ class ProductController extends AbstractController
             ]);
         }
 
-        if($form->isSubmitted() && !$form->isValid())
-        {
+        if ($form->isSubmitted() && !$form->isValid()) {
             $this->addFlash('warning', 'Something went wrong. Please check your form.');
         }
 
@@ -82,9 +72,6 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @param Product $product
-     * @param ProductManager $productManager
-     * @return Response
      * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"})
      */
     public function delete(Product $product, ProductManager $productManager): Response

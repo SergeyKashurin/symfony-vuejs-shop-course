@@ -8,32 +8,22 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class LocaleSubscriber implements EventSubscriberInterface
 {
-
-    /**
-     * @var string
-     */
     private string $defaultLocale;
 
-    /**
-     * @param string $defaultLocale
-     */
     public function __construct(string $defaultLocale)
     {
         $this->defaultLocale = $defaultLocale;
     }
 
-    /**
-     * @param RequestEvent $event
-     */
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
-        if(!$request->hasPreviousSession()) {
+        if (!$request->hasPreviousSession()) {
             return;
         }
 
         $locale = $request->attributes->get('_locale');
-        if($locale) {
+        if ($locale) {
             $request->getSession()->set('_locale', $locale);
         } else {
             $request->getSession()->get('_locale', $this->defaultLocale);
@@ -45,9 +35,9 @@ class LocaleSubscriber implements EventSubscriberInterface
         return [
             KernelEvents::REQUEST => [
                 [
-                    'onKernelRequest', 20
-                ]
-            ]
+                    'onKernelRequest', 20,
+                ],
+            ],
         ];
     }
 }

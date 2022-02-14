@@ -24,11 +24,6 @@ class OrderFormHandler
      */
     private $filterBuilderUpdater;
 
-    /**
-     * @param OrderManager $orderManager
-     * @param PaginatorInterface $paginator
-     * @param FilterBuilderUpdater $filterBuilderUpdater
-     */
     public function __construct(OrderManager $orderManager, PaginatorInterface $paginator, FilterBuilderUpdater $filterBuilderUpdater)
     {
         $this->orderManager = $orderManager;
@@ -37,8 +32,6 @@ class OrderFormHandler
     }
 
     /**
-     * @param Request $request
-     * @param FormInterface $filterForm
      * @return \Knp\Component\Pager\Pagination\PaginationInterface
      */
     public function processOrderFiltersForm(Request $request, FormInterface $filterForm)
@@ -60,7 +53,6 @@ class OrderFormHandler
     }
 
     /**
-     * @param Order $order
      * @return Order|null
      */
     public function processEditForm(Order $order)

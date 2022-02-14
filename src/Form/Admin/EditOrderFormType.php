@@ -39,7 +39,7 @@ class EditOrderFormType extends AbstractType
                 'label' => 'User',
                 'class' => User::class,
                 'required' => true,
-                'choice_label' => function(User $user) {
+                'choice_label' => function (User $user) {
                     return sprintf(
                         '#%s %s',
                         $user->getId(),

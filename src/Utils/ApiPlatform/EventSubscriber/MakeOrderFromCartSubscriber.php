@@ -16,43 +16,25 @@ use Symfony\Component\Security\Core\Security;
 
 class MakeOrderFromCartSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var Security
-     */
     private Security $security;
 
-    /**
-     * @var OrderManager
-     */
     private OrderManager $orderManager;
 
-    /**
-     * @var EventDispatcherInterface
-     */
     private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @param Security $security
-     * @param OrderManager $orderManager
-     * @param EventDispatcherInterface $eventDispatcher
-     */
     public function __construct(Security $security, OrderManager $orderManager, EventDispatcherInterface $eventDispatcher)
     {
-
         $this->security = $security;
         $this->orderManager = $orderManager;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    /**
-     * @param ViewEvent $event
-     */
     public function makeOrder(ViewEvent $event)
     {
         $order = $event->getControllerResult();
         $method = $event->getRequest()->getMethod();
 
-        if(!$order instanceof Order || Request::METHOD_POST !== $method) {
+        if (!$order instanceof Order || Request::METHOD_POST !== $method) {
             return;
         }
 
@@ -64,23 +46,23 @@ class MakeOrderFromCartSubscriber implements EventSubscriberInterface
         /** @var User $user */
         $user = $this->security->getUser();
 
-        if(!$user) {
+        if (!$user) {
             return;
         }
 
         $order->setOwner($user);
         $contentJson = $event->getRequest()->getContent();
 
-        if(!$contentJson) {
+        if (!$contentJson) {
             return;
         }
 
         $content = json_encode($contentJson, true);
-        if(!array_key_exists('cartId', $content)) {
+        if (!array_key_exists('cartId', $content)) {
             return;
         }
 
-        $cartId = (int)$content['cartId'];
+        $cartId = (int) $content['cartId'];
         $this->orderManager->addOrderProductsFromCart($order, $cartId);
         $this->orderManager->recalculateOrderTotalPrice($order);
         $order->setStatus(OrderStaticStorage::ORDER_STATUS_CREATED);
@@ -91,14 +73,14 @@ class MakeOrderFromCartSubscriber implements EventSubscriberInterface
         $order = $viewEvent->getControllerResult();
         $method = $viewEvent->getRequest()->getMethod();
 
-        if(!$order instanceof Order || Request::METHOD_POST !== $method) {
+        if (!$order instanceof Order || Request::METHOD_POST !== $method) {
             return;
         }
 
-        #$event = new OrderCreatedFromCartEvent($order);
-        #$this->eventDispatcher->dispatch($event);
+        //$event = new OrderCreatedFromCartEvent($order);
+        //$this->eventDispatcher->dispatch($event);
     }
-    
+
     /**
      * @return \array[][]
      */
@@ -107,12 +89,12 @@ class MakeOrderFromCartSubscriber implements EventSubscriberInterface
         return [
             KernelEvents::VIEW => [
                 [
-                    'makeOrder', EventPriorities::PRE_WRITE
+                    'makeOrder', EventPriorities::PRE_WRITE,
                 ],
                 [
-                    'sendNotificationsAboutNewOrder', EventPriorities::POST_WRITE
-                ]
-            ]
+                    'sendNotificationsAboutNewOrder', EventPriorities::POST_WRITE,
+                ],
+            ],
         ];
     }
 }

@@ -7,18 +7,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class OrderCreatedFromCartSendNotificationSubscriber implements EventSubscriberInterface
 {
-
-    /**
-     * @var OrderCreatedFromCartEmailSender
-     */
     private OrderCreatedFromCartEmailSender $orderCreatedFromCartEmailSender;
 
-    /**
-     * @param OrderCreatedFromCartEmailSender $orderCreatedFromCartEmailSender
-     */
     public function __construct(OrderCreatedFromCartEmailSender $orderCreatedFromCartEmailSender)
     {
-
         $this->orderCreatedFromCartEmailSender = $orderCreatedFromCartEmailSender;
     }
 

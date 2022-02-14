@@ -3,7 +3,6 @@
 namespace App\Form\Admin;
 
 use App\Entity\Category;
-use App\Entity\Product;
 use App\Form\DTO\EditProductModel;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

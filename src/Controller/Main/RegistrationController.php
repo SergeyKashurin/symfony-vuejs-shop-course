@@ -5,14 +5,12 @@ namespace App\Controller\Main;
 use App\Entity\User;
 use App\Form\Main\RegistrationFormType;
 use App\Messenger\Message\Event\UserRegisteredEvent;
-use App\Security\Verifier\EmailVerifier;
 use App\Repository\UserRepository;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Security\Verifier\EmailVerifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
@@ -24,9 +22,6 @@ class RegistrationController extends AbstractController
      */
     private $emailVerifier;
 
-    /**
-     * @param EmailVerifier $emailVerifier
-     */
     public function __construct(EmailVerifier $emailVerifier)
     {
         $this->emailVerifier = $emailVerifier;

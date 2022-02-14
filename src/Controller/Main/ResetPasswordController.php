@@ -6,9 +6,7 @@ use App\Entity\User;
 use App\Form\Main\ChangePasswordFormType;
 use App\Form\Main\ResetPasswordRequestFormType;
 use App\Messenger\Message\Command\ResetUserPassword;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
@@ -32,9 +30,6 @@ class ResetPasswordController extends AbstractController
      */
     private $resetPasswordHelper;
 
-    /**
-     * @param ResetPasswordHelperInterface $resetPasswordHelper
-     */
     public function __construct(ResetPasswordHelperInterface $resetPasswordHelper)
     {
         $this->resetPasswordHelper = $resetPasswordHelper;

@@ -7,12 +7,9 @@ use App\Event\UserLoggedInViaSocialNetworkEvent;
 use App\Utils\Factory\UserFactory;
 use App\Utils\Generator\PasswordGenerator;
 use App\Utils\Manager\UserManager;
-use Doctrine\ORM\EntityManagerInterface;
+use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\Provider\GoogleClient;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use KnpU\OAuth2ClientBundle\Client\Provider\FacebookClient;
-use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use League\OAuth2\Client\Provider\FacebookUser;
 use League\OAuth2\Client\Provider\GoogleUser;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -54,7 +51,7 @@ class GoogleAuthenticator extends SocialAuthenticator
     public function supports(Request $request)
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === 'connect_google_check';
+        return 'connect_google_check' === $request->attributes->get('_route');
     }
 
     public function getCredentials(Request $request)

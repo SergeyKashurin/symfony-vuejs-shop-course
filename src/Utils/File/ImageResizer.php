@@ -7,9 +7,6 @@ use Imagine\Image\Box;
 
 class ImageResizer
 {
-    /**
-     * @var Imagine
-     */
     private Imagine $imagine;
 
     public function __construct()
@@ -17,12 +14,6 @@ class ImageResizer
         $this->imagine = new Imagine();
     }
 
-    /**
-     * @param string $originalFileFolder
-     * @param string $originalFilename
-     * @param array $targetParams
-     * @return string
-     */
     public function resizeImageAndSave(string $originalFileFolder, string $originalFilename, array $targetParams): string
     {
         $originalFilePath = $originalFileFolder.'/'.$originalFilename;
@@ -33,8 +24,8 @@ class ImageResizer
         $targetWight = $targetParams['width'];
         $targetHeight = $targetParams['height'];
 
-        if($targetHeight) {
-            if($targetWight / $targetHeight > $ratio) {
+        if ($targetHeight) {
+            if ($targetWight / $targetHeight > $ratio) {
                 $targetWight = $targetHeight * $ratio;
             } else {
                 $targetHeight = $targetWight / $ratio;

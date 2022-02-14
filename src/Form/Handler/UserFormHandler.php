@@ -14,15 +14,8 @@ class UserFormHandler
      */
     private $userManager;
 
-    /**
-     * @var UserPasswordEncoderInterface
-     */
     private UserPasswordEncoderInterface $passwordEncoder;
 
-    /**
-     * @param UserManager $userManager
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
     public function __construct(UserManager $userManager, UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->userManager = $userManager;
@@ -30,7 +23,6 @@ class UserFormHandler
     }
 
     /**
-     * @param Form $form
      * @return Form
      */
     public function processEditForm(Form $form)
@@ -41,11 +33,11 @@ class UserFormHandler
         /** @var User $user */
         $user = $form->getData();
 
-        if(!$user->getId()) {
+        if (!$user->getId()) {
             $user->setEmail($newEmail);
         }
 
-        if($plainPassword) {
+        if ($plainPassword) {
             $encodedPassword = $this->passwordEncoder->encodePassword($user, $plainPassword);
             $user->setPassword($encodedPassword);
         }

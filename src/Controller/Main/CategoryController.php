@@ -11,15 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractController
 {
     /**
-     * @param Category $category
-     * @return Response
-     *
      * @Route("/category/{slug}", name="main_category_show")
      */
     public function show(Category $category): Response
     {
-
-        if(!$category) {
+        if (!$category) {
             throw new NotFoundHttpException();
         }
 

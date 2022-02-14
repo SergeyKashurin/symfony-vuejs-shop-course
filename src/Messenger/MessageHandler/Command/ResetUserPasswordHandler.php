@@ -25,25 +25,16 @@ class ResetUserPasswordHandler implements MessageHandlerInterface
      */
     private $emailSender;
 
-    /**
-     * @param UserManager $userManager
-     * @param ResetPasswordHelperInterface $resetPasswordHelper
-     * @param ResetUserPasswordEmailSender $emailSender
-     */
     public function __construct(
         UserManager $userManager,
         ResetPasswordHelperInterface $resetPasswordHelper,
         ResetUserPasswordEmailSender $emailSender
-    )
-    {
+    ) {
         $this->userManager = $userManager;
         $this->resetPasswordHelper = $resetPasswordHelper;
         $this->emailSender = $emailSender;
     }
 
-    /**
-     * @param ResetUserPassword $resetUserPassword
-     */
     public function __invoke(ResetUserPassword $resetUserPassword)
     {
         $email = $resetUserPassword->getEmail();
@@ -51,7 +42,7 @@ class ResetUserPasswordHandler implements MessageHandlerInterface
 
         /** @var User $user */
         $user = $this->userManager->getRepository()->findOneBy([
-            'email' => $email
+            'email' => $email,
         ]);
 
         if (!$user) {
@@ -62,7 +53,6 @@ class ResetUserPasswordHandler implements MessageHandlerInterface
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
             $this->emailSender->sendEmailToClient($user, $resetToken);
         } catch (ResetPasswordExceptionInterface $exception) {
-            //
         }
     }
 }

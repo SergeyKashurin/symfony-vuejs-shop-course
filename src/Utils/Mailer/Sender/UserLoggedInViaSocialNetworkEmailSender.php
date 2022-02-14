@@ -33,7 +33,7 @@ class UserLoggedInViaSocialNetworkEmailSender
             ->setContext([
                 'user' => $user,
                 'plainPassword' => $plainPassword,
-                'profileUrl' => $this->urlGenerator->generate('main_profile_index', [], UrlGeneratorInterface::ABSOLUTE_URL)
+                'profileUrl' => $this->urlGenerator->generate('main_profile_index', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ]);
 
         $this->mailerSender->sendTemplatedEmail($mailerOptions);

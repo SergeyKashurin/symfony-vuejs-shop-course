@@ -10,29 +10,16 @@ use Symfony\Component\Mailer\MailerInterface;
 
 class MailerSender
 {
-    /**
-     * @var MailerInterface
-     */
     private MailerInterface $mailer;
 
-    /**
-     * @var LoggerInterface
-     */
     private LoggerInterface $logger;
 
-    /**
-     * @param MailerInterface $mailer
-     * @param LoggerInterface $logger
-     */
     public function __construct(MailerInterface $mailer, LoggerInterface $logger)
     {
         $this->mailer = $mailer;
         $this->logger = $logger;
     }
 
-    /**
-     * @param MailerOptions $mailerOptions
-     */
     public function sendTemplatedEmail(MailerOptions $mailerOptions)
     {
         $email = (new TemplatedEmail())
@@ -41,7 +28,7 @@ class MailerSender
             ->htmlTemplate($mailerOptions->getHtmlTemplate())
             ->context($mailerOptions->getContext());
 
-        if($mailerOptions->getCc()) {
+        if ($mailerOptions->getCc()) {
             $email->cc($mailerOptions->getCc());
         }
 
@@ -57,12 +44,10 @@ class MailerSender
 
             $this->sendTemplatedEmail($systemMailerOptions);
         }
+
         return $email;
     }
 
-    /**
-     * @param MailerOptions $mailerOptions
-     */
     private function sendSystemEmail(MailerOptions $mailerOptions)
     {
         $mailerOptions->setSubject('[Exception] An error occurred while sending the letter.');

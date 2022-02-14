@@ -13,17 +13,11 @@ class UserLoggedInViaSocialNetworkSendNotificationSubscriber implements EventSub
      */
     private $emailSender;
 
-    /**
-     * @param UserLoggedInViaSocialNetworkEmailSender $emailSender
-     */
     public function __construct(UserLoggedInViaSocialNetworkEmailSender $emailSender)
     {
         $this->emailSender = $emailSender;
     }
 
-    /**
-     * @param UserLoggedInViaSocialNetworkEvent $event
-     */
     public function onUserLoggedInViaSocialNetworkEvent(UserLoggedInViaSocialNetworkEvent $event)
     {
         $user = $event->getUser();
@@ -38,7 +32,7 @@ class UserLoggedInViaSocialNetworkSendNotificationSubscriber implements EventSub
     public static function getSubscribedEvents(): array
     {
         return [
-            UserLoggedInViaSocialNetworkEvent::class => 'onUserLoggedInViaSocialNetworkEvent'
+            UserLoggedInViaSocialNetworkEvent::class => 'onUserLoggedInViaSocialNetworkEvent',
         ];
     }
 }

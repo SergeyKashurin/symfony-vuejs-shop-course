@@ -3,13 +3,11 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Order;
-use App\Entity\OrderProduct;
 use App\Entity\StaticStorage\OrderStaticStorage;
 use App\Form\Admin\EditOrderFormType;
 use App\Form\Admin\FilterType\OrderFilterFormType;
 use App\Form\DTO\EditOrderModel;
 use App\Form\Handler\OrderFormHandler;
-use App\Repository\OrderRepository;
 use App\Utils\Manager\OrderManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +33,7 @@ class OrderController extends AbstractController
         return $this->render('admin/order/list.html.twig', [
             'pagination' => $pagination,
             'orderStatusChoices' => OrderStaticStorage::getOrderStatusChoices(),
-            'form' => $filterForm->createView()
+            'form' => $filterForm->createView(),
         ]);
     }
 
@@ -69,7 +67,7 @@ class OrderController extends AbstractController
         return $this->render('admin/order/edit.html.twig', [
             'order' => $order,
             'orderProducts' => $orderProducts,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
     }
 

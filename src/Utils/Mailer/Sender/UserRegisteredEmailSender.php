@@ -19,20 +19,12 @@ class UserRegisteredEmailSender
      */
     private $urlGenerator;
 
-    /**
-     * @param MailerSender $mailerSender
-     * @param UrlGeneratorInterface $urlGenerator
-     */
     public function __construct(MailerSender $mailerSender, UrlGeneratorInterface $urlGenerator)
     {
         $this->mailerSender = $mailerSender;
         $this->urlGenerator = $urlGenerator;
     }
 
-    /**
-     * @param User $user
-     * @param VerifyEmailSignatureComponents $signatureComponents
-     */
     public function sendEmailToClient(User $user, VerifyEmailSignatureComponents $signatureComponents)
     {
         $emailContext = [];

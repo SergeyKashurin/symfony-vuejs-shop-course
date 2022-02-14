@@ -2,13 +2,12 @@
 
 namespace App\Controller\Admin;
 
-use App\Entity\StaticStorage\UserStaticStorage;
 use App\Entity\User;
 use App\Form\Admin\EditUserFormType;
 use App\Form\Handler\UserFormHandler;
+use App\Repository\UserRepository;
 use App\Utils\Manager\UserManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -32,25 +31,20 @@ class UserController extends AbstractController
         ]);
     }
 
-
     /**
-     * @param Request $request
-     * @param User|null $user
-     * @return Response
-     *
      * @Route("/edit/{id}", name="edit", requirements={"id"="\d+"})
      * @Route("/add", name="add")
      */
     public function edit(Request $request, UserFormHandler $userFormHandler, User $user = null): Response
     {
-        if(!$user) {
+        if (!$user) {
             $user = new User();
         }
 
         $form = $this->createForm(EditUserFormType::class, $user);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $user = $userFormHandler->processEditForm($form);
 
             $this->addFlash('success', 'Your changes were saved!');
@@ -60,8 +54,7 @@ class UserController extends AbstractController
             ]);
         }
 
-        if($form->isSubmitted() && !$form->isValid())
-        {
+        if ($form->isSubmitted() && !$form->isValid()) {
             $this->addFlash('warning', 'Something went wrong. Please check your form.');
         }
 
@@ -72,9 +65,6 @@ class UserController extends AbstractController
     }
 
     /**
-     * @param User $user
-     * @return Response
-     *
      * @Route("/delete/{id}", name="delete", requirements={"id"="\d+"})
      */
     public function delete(User $user, UserManager $userManager): Response

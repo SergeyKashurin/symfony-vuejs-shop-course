@@ -33,7 +33,7 @@ class OrderCreatedFromCartEmailSender
             ->setHtmlTemplate('main/email/client/created_order_from_cart.html.twig')
             ->setContext([
                 'order' => $order,
-                'profileUrl' => $this->urlGenerator->generate('main_profile_index', [], UrlGeneratorInterface::ABSOLUTE_URL)
+                'profileUrl' => $this->urlGenerator->generate('main_profile_index', [], UrlGeneratorInterface::ABSOLUTE_URL),
             ]);
 
         $this->mailerSender->sendTemplatedEmail($mailerOptions);
@@ -46,7 +46,7 @@ class OrderCreatedFromCartEmailSender
             ->setSubject('Client created order')
             ->setHtmlTemplate('main/email/manager/created_order_from_cart.html.twig')
             ->setContext([
-                'order' => $order
+                'order' => $order,
             ]);
 
         $this->mailerSender->sendTemplatedEmail($mailerOptions);

@@ -16,7 +16,6 @@ class CartController extends AbstractController
      */
     public function show(Request $request, CartRepository $cartRepository): Response
     {
-
         $phpSessionId = $request->cookies->get('PHPSESSID');
         $cart = $cartRepository->findOneBy(['sessionId' => $phpSessionId]);
 
@@ -30,7 +29,6 @@ class CartController extends AbstractController
      */
     public function create(Request $request, OrderManager $orderManager): Response
     {
-
         $phpSessionId = $request->cookies->get('PHPSESSID');
         $user = $this->getUser();
         $orderManager->createOrderFromCartBySessionId($phpSessionId, $user);

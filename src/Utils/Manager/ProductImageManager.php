@@ -2,7 +2,6 @@
 
 namespace App\Utils\Manager;
 
-use App\Entity\Product;
 use App\Entity\ProductImage;
 use App\Utils\File\ImageResizer;
 use App\Utils\Filesystem\FilesystemWorker;
@@ -11,27 +10,12 @@ use Doctrine\Persistence\ObjectRepository;
 
 class ProductImageManager extends AbstractBaseManager
 {
-    /**
-     * @var FilesystemWorker
-     */
     private FilesystemWorker $filesystemWorker;
 
-    /**
-     * @var string
-     */
     private string $uploadsTempDir;
 
-    /**
-     * @var ImageResizer
-     */
     private ImageResizer $imageResizer;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param FilesystemWorker $filesystemWorker
-     * @param ImageResizer $imageResizer
-     * @param string $uploadsTempDir
-     */
     public function __construct(EntityManagerInterface $entityManager, FilesystemWorker $filesystemWorker, ImageResizer $imageResizer, string $uploadsTempDir)
     {
         parent::__construct($entityManager);
@@ -40,22 +24,17 @@ class ProductImageManager extends AbstractBaseManager
         $this->imageResizer = $imageResizer;
     }
 
-    /**
-     * @return ObjectRepository
-     */
     public function getRepository(): ObjectRepository
     {
         return $this->entityManager->getRepository(ProductImage::class);
     }
 
     /**
-     * @param string $productDir
-     * @param string|null $tempImageFilename
      * @return ProductImage|null
      */
     public function saveImageForProduct(string $productDir, string $tempImageFilename = null)
     {
-        if(!$tempImageFilename) {
+        if (!$tempImageFilename) {
             return null;
         }
 
@@ -67,7 +46,7 @@ class ProductImageManager extends AbstractBaseManager
             'width' => 60,
             'height' => null,
             'newFolder' => $productDir,
-            'newFilename' => sprintf('%s_%s.jpg', $filenameId, 'small')
+            'newFilename' => sprintf('%s_%s.jpg', $filenameId, 'small'),
         ];
         $imageSmall = $this->imageResizer->resizeImageAndSave($this->uploadsTempDir, $tempImageFilename, $imageSmallParams);
 
@@ -75,7 +54,7 @@ class ProductImageManager extends AbstractBaseManager
             'width' => 430,
             'height' => null,
             'newFolder' => $productDir,
-            'newFilename' => sprintf('%s_%s.jpg', $filenameId, 'middle')
+            'newFilename' => sprintf('%s_%s.jpg', $filenameId, 'middle'),
         ];
         $imageMiddle = $this->imageResizer->resizeImageAndSave($this->uploadsTempDir, $tempImageFilename, $imageMiddleParams);
 
@@ -83,7 +62,7 @@ class ProductImageManager extends AbstractBaseManager
             'width' => 800,
             'height' => null,
             'newFolder' => $productDir,
-            'newFilename' => sprintf('%s_%s.jpg', $filenameId, 'big')
+            'newFilename' => sprintf('%s_%s.jpg', $filenameId, 'big'),
         ];
         $imageBig = $this->imageResizer->resizeImageAndSave($this->uploadsTempDir, $tempImageFilename, $imageBigParams);
 
@@ -95,10 +74,6 @@ class ProductImageManager extends AbstractBaseManager
         return $productImage;
     }
 
-    /**
-     * @param ProductImage $productImage
-     * @param string $productDir
-     */
     public function removeImageFromProduct(ProductImage $productImage, string $productDir)
     {
         $smallFilePath = $productDir.'/'.$productImage->getFilenameSmall();
@@ -115,5 +90,4 @@ class ProductImageManager extends AbstractBaseManager
 
         $this->entityManager->flush();
     }
-
 }

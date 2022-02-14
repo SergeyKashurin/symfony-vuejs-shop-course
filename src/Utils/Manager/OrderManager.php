@@ -15,33 +15,22 @@ class OrderManager extends AbstractBaseManager
 {
     private CartManager $cartManager;
 
-    /**
-     * @param EntityManagerInterface $entityManager
-     * @param CartManager $cartManager
-     */
     public function __construct(EntityManagerInterface $entityManager, CartManager $cartManager)
     {
         parent::__construct($entityManager);
         $this->cartManager = $cartManager;
     }
 
-    /**
-     * @return ObjectRepository
-     */
     public function getRepository(): ObjectRepository
     {
         return $this->entityManager->getRepository(Order::class);
     }
 
-    /**
-     * @param string $sessionId
-     * @param User $user
-     */
     public function createOrderFromCartBySessionId(string $sessionId, User $user)
     {
         $cart = $this->cartManager->getRepository()->findOneBy(['sessionId' => $sessionId]);
 
-        if($cart) {
+        if ($cart) {
             $this->createOrderFromCart($cart, $user);
         }
     }
@@ -51,7 +40,7 @@ class OrderManager extends AbstractBaseManager
         /** @var Cart $cart */
         $cart = $this->cartManager->getRepository()->find($cartId);
 
-        if($cart) {
+        if ($cart) {
             /** @var CartProduct $cartProduct */
             foreach ($cart->getCartProducts()->getValues() as $cartProduct) {
                 $product = $cartProduct->getProduct();
@@ -68,10 +57,6 @@ class OrderManager extends AbstractBaseManager
         }
     }
 
-    /**
-     * @param Cart $cart
-     * @param User $user
-     */
     public function createOrderFromCart(Cart $cart, User $user)
     {
         $order = new Order();
@@ -87,10 +72,8 @@ class OrderManager extends AbstractBaseManager
         $this->cartManager->remove($cart);
     }
 
-    /**
-     * @param Order $order
-     */
-    public function recalculateOrderTotalPrice(Order $order) {
+    public function recalculateOrderTotalPrice(Order $order)
+    {
         $orderTotalPrice = 0;
 
         /** @var OrderProduct $orderProduct */
@@ -101,9 +84,6 @@ class OrderManager extends AbstractBaseManager
         $order->setTotalPrice($orderTotalPrice);
     }
 
-    /**
-     * @param object $entity
-     */
     public function save(object $entity)
     {
         $entity->setUpdatedAt(new \DateTimeImmutable());

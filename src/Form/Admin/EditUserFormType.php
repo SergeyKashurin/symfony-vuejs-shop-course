@@ -22,7 +22,7 @@ class EditUserFormType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
-                ]
+                ],
             ])
             ->add('plainPassword', TextType::class, [
                 'label' => 'New password',
@@ -30,7 +30,7 @@ class EditUserFormType extends AbstractType
                 'mapped' => false,
                 'attr' => [
                     'class' => 'form-control',
-                ]
+                ],
             ])
             ->add('roles', ChoiceType::class, [
                 'label' => 'Roles',
@@ -46,30 +46,30 @@ class EditUserFormType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                ]
+                ],
             ])
             ->add('phone', TextType::class, [
                 'label' => 'Phone',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                    ]
+                    ],
             ])
             ->add('address', TextType::class, [
                 'label' => 'Address',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                ]
+                ],
             ])
             ->add('zipcode', TextType::class, [
                 'label' => 'Zip code',
                 'required' => false,
                 'attr' => [
                     'class' => 'form-control',
-                ]
+                ],
             ])
-            ->add('isDeleted',CheckboxType::class, [
+            ->add('isDeleted', CheckboxType::class, [
                 'label' => 'Is deleted?',
                 'required' => false,
                 'attr' => [

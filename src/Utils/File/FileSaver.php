@@ -1,36 +1,19 @@
 <?php
 
-
 namespace App\Utils\File;
 
-
 use App\Utils\Filesystem\FilesystemWorker;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class FileSaver {
-
-    /**
-     * @var SluggerInterface
-     */
+class FileSaver
+{
     private SluggerInterface $slugger;
 
-    /**
-     * @var string
-     */
     private string $uploadsTempDir;
 
-    /**
-     * @var FilesystemWorker
-     */
     private FilesystemWorker $filesystemWorker;
 
-    /**
-     * @param SluggerInterface $slugger
-     * @param FilesystemWorker $filesystemWorker
-     * @param string $uploadsTempDir
-     */
     public function __construct(SluggerInterface $slugger, FilesystemWorker $filesystemWorker, string $uploadsTempDir)
     {
         $this->slugger = $slugger;
@@ -39,7 +22,6 @@ class FileSaver {
     }
 
     /**
-     * @param UploadedFile $uploadedFile
      * @return string|null
      */
     public function saveUploadedFileIntoTemp(UploadedFile $uploadedFile)
@@ -59,5 +41,4 @@ class FileSaver {
 
         return $filename;
     }
-
 }

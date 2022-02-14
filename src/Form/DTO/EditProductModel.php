@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class EditProductModel
 {
-
     /**
      * @var int
      */
@@ -17,6 +16,7 @@ class EditProductModel
 
     /**
      * @Assert\NotBlank(message="Please enter a title")
+     *
      * @var string
      */
     public $title;
@@ -24,6 +24,7 @@ class EditProductModel
     /**
      * @Assert\NotBlank(message="Please enter a price")
      * @Assert\GreaterThanOrEqual(value="0")
+     *
      * @var string
      */
     public $price;
@@ -34,18 +35,21 @@ class EditProductModel
      *     mimeTypes = {"image/jpeg", "image/png"},
      *     mimeTypesMessage = "Please upload a valid image"
      * )
+     *
      * @var UploadedFile|null
      */
     public $newImage;
 
     /**
      * @Assert\NotBlank(message="Please indicate the quantity")
+     *
      * @var int
      */
     public $quantity;
 
     /**
      * @Assert\NotBlank(message="Please select a category")
+     *
      * @var Category
      */
     public $description;
@@ -69,8 +73,7 @@ class EditProductModel
     {
         $model = new self();
 
-        if(!$product)
-        {
+        if (!$product) {
             return $model;
         }
 
@@ -81,6 +84,7 @@ class EditProductModel
         $model->description = $product->getDescription();
         $model->isPublished = $product->getIsPublished();
         $model->isisDeleted = $product->getIsDeleted();
+
         return $model;
     }
 }

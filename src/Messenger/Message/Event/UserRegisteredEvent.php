@@ -2,8 +2,6 @@
 
 namespace App\Messenger\Message\Event;
 
-use App\Entity\User;
-
 class UserRegisteredEvent
 {
     /**
@@ -11,9 +9,6 @@ class UserRegisteredEvent
      */
     private $userId;
 
-    /**
-     * @param string $userId
-     */
     public function __construct(string $userId)
     {
         $this->userId = $userId;
