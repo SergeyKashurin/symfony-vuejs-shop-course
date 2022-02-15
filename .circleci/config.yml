@@ -4,4 +4,6 @@ jobs:
     docker:
       - image: circleci/php:7.4-node-browsers
 
-      - run: make run-test
+    steps:
+      - checkout
+      - run: sudo apt update
